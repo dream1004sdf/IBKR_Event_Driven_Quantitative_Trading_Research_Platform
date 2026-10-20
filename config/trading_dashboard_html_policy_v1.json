@@ -1,0 +1,37 @@
+{
+  "policy_version": "trading-dashboard-html-policy-v1",
+  "milestone": "M144",
+  "description": "Read-only browser command-center UI policy rendered from the M143 dashboard snapshot contract.",
+  "dashboard_profile_json": "config/trading_dashboard_snapshot_profile_v1.json",
+  "input_contract": "trading-dashboard-snapshot-v1",
+  "output_contract": "trading-dashboard-html-v1",
+  "default_refresh_seconds": 1,
+  "ui_sections": [
+    "overview",
+    "ai_opinion",
+    "account_margin",
+    "portfolio_risk",
+    "mark_quality",
+    "macro_economic",
+    "paper_positions",
+    "account_positions",
+    "buy_sell_plan",
+    "latest_one_line_news",
+    "standing_regimes",
+    "market_data_summary",
+    "sources",
+    "safety"
+  ],
+  "status_colors": {
+    "green": "normal paper operation",
+    "yellow": "reduced size or operator attention condition",
+    "red": "do not add new risk until cause is resolved"
+  },
+  "safety": {
+    "read_only_html_renderer": true,
+    "paper_only_control_surface": true,
+    "ibkr_order_submitted": false,
+    "transmit_enabled": false,
+    "live_order_routing_enabled": false
+  }
+}

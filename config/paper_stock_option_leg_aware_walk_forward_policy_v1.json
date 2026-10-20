@@ -1,0 +1,129 @@
+{
+  "policy_version": "paper-stock-option-leg-aware-walk-forward-v1",
+  "created_at": "2026-06-29",
+  "milestone": "M105",
+  "purpose": "Tune the paper stock/option allocator after applying the M104 live option-leg quote gate inside each candidate evaluation.",
+  "scope": {
+    "scorer_name": "openai",
+    "model_name": "gpt-5.4-mini",
+    "scorer_version": "openai-replay-score-v14-nuanced-v1",
+    "price_source": "yahoo_chart_daily_adjclose",
+    "start": "2025-01-01",
+    "limit": 1000,
+    "quote_snapshot": "exports/m104_ibkr_regular_session_option_leg_quote_snapshot.json",
+    "checkpoint": "work/m105_leg_aware_walk_forward_checkpoint.json",
+    "reports": [
+      "exports/m105_v14_nuanced_v1_leg_aware_walk_forward_tuning.md",
+      "exports/m105_v14_nuanced_v1_leg_aware_walk_forward_tuning.json"
+    ]
+  },
+  "walk_forward": {
+    "rows": 719,
+    "fold_count": 6,
+    "min_train_rows": 240,
+    "test_window_rows": 80,
+    "step_rows": 80,
+    "rolling_train_rows": null
+  },
+  "leg_gate": {
+    "quote_snapshot_version": "ibkr-option-quote-snapshot-v1",
+    "quote_generated_at": "2026-06-29T13:51:42.126800+00:00",
+    "max_leg_spread_pct": 0.3,
+    "fallback_to_stock": true,
+    "rule": "Every candidate parameter set is first converted to theoretical stock/option paper allocations, then passed through the M104 live-leg quote gate before optimizer scoring."
+  },
+  "grid": {
+    "combinations_per_fold": 432,
+    "min_confidence_grid": [
+      0.3,
+      0.35,
+      0.4
+    ],
+    "min_stock_expected_return_grid": [
+      0.0025,
+      0.005,
+      0.01
+    ],
+    "min_option_score_grid": [
+      0.3,
+      0.35,
+      0.4,
+      0.45
+    ],
+    "min_option_return_on_risk_grid": [
+      0.0,
+      0.1,
+      0.25
+    ],
+    "option_preference_edge_grid": [
+      0.0,
+      0.05,
+      0.1,
+      0.2
+    ],
+    "min_selection_rate": 0.45,
+    "pnl_weight": 0.35,
+    "regret_penalty_weight": 0.25,
+    "option_usage_penalty_weight": 0.05
+  },
+  "fixed_assumptions": {
+    "underlying_reference_price": 100.0,
+    "stock_quantity": 10.0,
+    "stock_stop_loss_pct": 0.02,
+    "min_dte": 7,
+    "base_implied_vol": 0.55,
+    "risk_free_rate": 0.04,
+    "contract_multiplier": 100.0,
+    "moneyness_offset_pct": 0.0,
+    "spread_width_pct": 0.05
+  },
+  "result": {
+    "selected_allocations": 301,
+    "selection_rate": 0.6283924843423799,
+    "evaluated_allocations": 301,
+    "positive_realized": 182,
+    "positive_realized_rate": 0.6046511627906976,
+    "total_realized_pnl": 8565.28928708328,
+    "avg_realized_pnl": 28.456110588316545,
+    "avg_allocation_regret": 21.388849156187156,
+    "selected_instrument_counts": {
+      "blocked": 178,
+      "stock": 261,
+      "option": 40
+    },
+    "selected_strategy_counts": {
+      "blocked": 178,
+      "stock_short": 124,
+      "stock_long": 137,
+      "bull_call_debit_spread": 36,
+      "bear_put_debit_spread": 4
+    },
+    "option_gate_counts": {
+      "option_allocations_seen": 55,
+      "option_allocations_passed": 40,
+      "option_allocations_downgraded_to_stock": 15,
+      "option_allocations_blocked": 0
+    },
+    "matched_strategy_counts": {
+      "bull_call_debit_spread": 36,
+      "bear_put_debit_spread": 4
+    },
+    "failed_reason_counts": {
+      "missing_higher_short_leg_same_expiration": 13,
+      "no_eligible_long_leg_quote": 2
+    }
+  },
+  "interpretation": {
+    "status": "First operational leg-aware tuning candidate.",
+    "comparison": "M105 positive rate is slightly lower than M102 raw wide-grid tuning (60.47% vs 60.57%) and lower than M104-gated M102 (60.47% vs 60.93%), while reducing final option exposure from 49 to 40 trades versus M104-gated M102.",
+    "recommendation": "Use M105 as the safer allocator design pattern because tradability is considered inside tuning, but do not declare it a PnL replacement for M102/M104 until a wider leg-aware grid or better live quote coverage is tested."
+  },
+  "safety": {
+    "paper_only": true,
+    "read_only_quote_snapshot": true,
+    "ibkr_order_submitted": false,
+    "account_or_portfolio_checked": false,
+    "margin_checked": false,
+    "positions_checked": false
+  }
+}

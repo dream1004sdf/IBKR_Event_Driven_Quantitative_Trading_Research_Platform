@@ -1,0 +1,64 @@
+{
+  "policy_version": "ibkr-account-scaled-position-sizing-v1",
+  "created_at": "2026-06-30",
+  "milestone": "M111",
+  "purpose": "Resize M108 paper execution-readiness ticket drafts to fit read-only IBKR account equity and cash budgets before applying the account-backed portfolio gate.",
+  "scope": {
+    "readiness_input": "exports/m108_m107_execution_readiness.json",
+    "account_snapshot_json": "exports/m110_ibkr_account_snapshot.json",
+    "account_scaled_sizing_report": "exports/m111_m108_account_scaled_position_sizing.json",
+    "account_scaled_sizing_markdown": "exports/m111_m108_account_scaled_position_sizing.md"
+  },
+  "sizing_policy": {
+    "equity_haircut_pct": 0.0,
+    "cash_haircut_pct": 0.0,
+    "max_single_trade_risk_pct": 0.005,
+    "max_total_open_risk_pct": 0.05,
+    "max_gross_notional_pct": 1.0,
+    "max_option_risk_pct": 0.02,
+    "max_short_notional_pct": 0.2,
+    "max_symbol_risk_pct": 0.01,
+    "max_stock_notional_pct": 0.02,
+    "max_cash_per_trade_pct": 0.02,
+    "sizing_safety_buffer_pct": 0.05,
+    "allow_fractional_shares": true,
+    "min_stock_quantity": 0.01,
+    "stock_quantity_increment": 0.01,
+    "max_approved_tickets": 25
+  },
+  "sizing_result": {
+    "not_actionable_source": 232,
+    "sized": 209,
+    "not_sized": 38,
+    "not_sized_reason": {
+      "minimum_option_contract_exceeds_account_risk_budget": 38
+    },
+    "sized_ticket_drafts": 241,
+    "sized_actionable_ticket_drafts": 209
+  },
+  "portfolio_result_after_sizing": {
+    "approved_ticket_count": 25,
+    "portfolio_status_counts": {
+      "not_candidate": 200,
+      "portfolio_needs_human_review": 25,
+      "not_ready": 70,
+      "portfolio_not_ready": 184
+    },
+    "binding_failure": {
+      "approved_ticket_count_within_mock_policy": 184
+    }
+  },
+  "interpretation": {
+    "status": "M111 turns M110's zero-account-backed approvals into 25 account-sized paper approvals.",
+    "finding": "The fixed ticket size was the M110 blocker. Smaller account-scaled stock tickets fit the read-only account budget, while option tickets remain blocked when one minimum contract exceeds the account risk cap.",
+    "human_review_note": "Approved tickets are still human-review items because fractional-share support, short exposure, and account-specific execution permissions must be confirmed before any order-capable layer.",
+    "recommendation": "Next milestone should add pre-trade order preview/margin what-if diagnostics or a paper-only ticket review queue, still without transmitting live orders."
+  },
+  "safety": {
+    "paper_only": true,
+    "read_only_ibkr_account_snapshot": true,
+    "order_preview_checked": false,
+    "ibkr_order_submitted": false,
+    "live_order_routing_enabled": false
+  }
+}

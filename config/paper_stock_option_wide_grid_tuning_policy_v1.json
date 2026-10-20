@@ -1,0 +1,119 @@
+{
+  "policy_version": "paper-stock-option-wide-grid-tuning-policy-v1",
+  "created_at": "2026-06-29",
+  "mode": "read_only_resumable_wide_grid_stock_option_walk_forward_tuning",
+  "purpose": "Expand the M100 stock/option strategy allocation grid while preserving fold-level checkpoints so long searches can resume before market open.",
+  "checkpointing": {
+    "enabled": true,
+    "checkpoint_path": "work/m102_stock_option_wide_grid_checkpoint.json",
+    "checkpoint_granularity": "fold",
+    "resume_rule": "If the checkpoint signature matches the current row count and parameter grid, completed folds are reused."
+  },
+  "wide_grid": {
+    "combinations_per_fold": 2500,
+    "min_confidence_grid": [
+      0.30,
+      0.325,
+      0.35,
+      0.375,
+      0.40
+    ],
+    "min_stock_expected_return_grid": [
+      0.0025,
+      0.005,
+      0.0075,
+      0.01
+    ],
+    "min_option_score_grid": [
+      0.25,
+      0.30,
+      0.35,
+      0.40,
+      0.45
+    ],
+    "min_option_return_on_risk_grid": [
+      0.0,
+      0.05,
+      0.10,
+      0.15,
+      0.25
+    ],
+    "option_preference_edge_grid": [
+      0.0,
+      0.025,
+      0.05,
+      0.075,
+      0.10
+    ]
+  },
+  "walk_forward_setup": {
+    "rows": 719,
+    "fold_count": 6,
+    "min_train_rows": 240,
+    "test_window_rows": 80,
+    "step_rows": 80,
+    "rolling_train_rows": null,
+    "underlying_reference_price": 100.0,
+    "stock_quantity": 10.0,
+    "stock_stop_loss_pct": 0.02,
+    "min_dte": 7,
+    "base_implied_vol": 0.55,
+    "risk_free_rate": 0.04,
+    "contract_multiplier": 100.0,
+    "moneyness_offset_pct": 0.0,
+    "spread_width_pct": 0.05,
+    "min_selection_rate": 0.45,
+    "pnl_weight": 0.35,
+    "regret_penalty_weight": 0.25,
+    "option_usage_penalty_weight": 0.05
+  },
+  "live_replay_evidence": {
+    "run_at": "2026-06-29T12:14:21Z",
+    "command": "python main.py replay-score-strategy-walk-forward-tune --start 2025-01-01 --scorer-name openai --model-name gpt-5.4-mini --scorer-version openai-replay-score-v14-nuanced-v1 --price-source yahoo_chart_daily_adjclose --limit 1000 --min-train-rows 240 --test-window-rows 80 --step-rows 80 --min-confidence-grid 0.30,0.325,0.35,0.375,0.40 --min-stock-expected-return-grid 0.0025,0.005,0.0075,0.01 --min-option-score-grid 0.25,0.30,0.35,0.40,0.45 --min-option-return-on-risk-grid 0.0,0.05,0.10,0.15,0.25 --option-preference-edge-grid 0.0,0.025,0.05,0.075,0.10 --checkpoint-path work/m102_stock_option_wide_grid_checkpoint.json",
+    "aggregate_test_rows": 479,
+    "aggregate_test_selected_allocations": 279,
+    "aggregate_test_selection_rate": 0.5825,
+    "aggregate_test_positive_realized": 169,
+    "aggregate_test_evaluated_allocations": 279,
+    "aggregate_test_positive_realized_rate": 0.6057,
+    "aggregate_test_total_pnl": 9457.71,
+    "aggregate_test_avg_pnl": 33.90,
+    "aggregate_test_avg_regret": 18.55,
+    "aggregate_test_instrument_split": {
+      "stock": 209,
+      "option": 70,
+      "blocked": 200
+    },
+    "aggregate_test_strategy_split": {
+      "stock_long": 107,
+      "stock_short": 102,
+      "bull_call_debit_spread": 66,
+      "bear_put_debit_spread": 4,
+      "blocked": 200
+    },
+    "dominant_selected_params": {
+      "min_confidence": 0.35,
+      "min_stock_expected_return": 0.0075,
+      "min_option_score": 0.25,
+      "min_option_return_on_risk": 0.25,
+      "option_preference_edge": 0.05
+    },
+    "reports": [
+      "exports/m102_v14_nuanced_v1_stock_option_wide_grid_tuning.md",
+      "exports/m102_v14_nuanced_v1_stock_option_wide_grid_tuning.json"
+    ]
+  },
+  "interpretation": {
+    "versus_narrow_m100": "The wide grid selected fewer trades, slightly improved positive rate and average paper PnL, but reduced total paper PnL versus the stored M100 artifact.",
+    "operating_use": "Treat the wide-grid result as a refined candidate, not automatic replacement. Compare against M100 and liquidity-gated M101 before execution work."
+  },
+  "safety": {
+    "paper_only": true,
+    "uses_live_option_chain": false,
+    "uses_live_option_quotes": false,
+    "ibkr_order_submitted": false,
+    "account_or_portfolio_checked": false,
+    "margin_checked": false,
+    "scorer_rows_mutated": false
+  }
+}

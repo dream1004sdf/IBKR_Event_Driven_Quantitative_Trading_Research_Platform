@@ -1,0 +1,46 @@
+{
+  "policy_version": "paper-cycle-watch-profile-policy-v1",
+  "milestone": "M132",
+  "description": "Profile-backed operating configuration for M131 one-tick paper watch execution.",
+  "paper_only": true,
+  "live_order_routing_enabled": false,
+  "ibkr_order_submitted": false,
+  "transmit_enabled": false,
+  "profile_contract": {
+    "command": "replay-score-paper-cycle-watch-tick --profile-json config/paper_cycle_watch_profile_v1.json",
+    "profile_version": "paper-cycle-watch-profile-v1",
+    "profile_path": "config/paper_cycle_watch_profile_v1.json",
+    "profile_sections": [
+      "paths",
+      "watch",
+      "execution",
+      "risk_limits",
+      "outputs",
+      "safety"
+    ],
+    "path_resolution": "Profile-sourced relative paths resolve relative to the profile JSON directory. Explicit CLI path overrides resolve normally from the current working directory.",
+    "override_rule": "Explicit CLI values override profile values."
+  },
+  "validation": {
+    "seed_watch_run_id": "m132_20260630_profile_watch_seed",
+    "skip_watch_run_id": "m132_20260630_profile_watch_skip",
+    "force_resume_watch_run_id": "m132_20260630_profile_watch_force_resume",
+    "seed_action": "executed_scheduler_tick",
+    "seed_new_paper_fills": 10,
+    "skip_action": "skipped_unchanged_inputs",
+    "force_resume_action": "executed_scheduler_tick",
+    "force_resume_new_paper_fills": 0,
+    "force_resume_cumulative_paper_fills": 10,
+    "force_resume_runs_completed_total": 2,
+    "force_resume_next_scheduler_tick_index": 3,
+    "force_resume_final_risk_state": "within_limits",
+    "outputs": {
+      "profile": "config/paper_cycle_watch_profile_v1.json",
+      "checkpoint": "exports/m132_profile_watch_checkpoint.json",
+      "watch_state": "exports/m132_profile_watch_state.json",
+      "seed_report": "exports/m132_profile_watch_tick.md",
+      "skip_report": "exports/m132_profile_watch_skip.md",
+      "force_resume_report": "exports/m132_profile_watch_force_resume.md"
+    }
+  }
+}

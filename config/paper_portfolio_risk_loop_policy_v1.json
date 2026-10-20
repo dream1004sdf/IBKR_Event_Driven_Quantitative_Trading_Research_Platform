@@ -1,0 +1,50 @@
+{
+  "policy_version": "paper-portfolio-risk-loop-policy-v1",
+  "milestone": "M126",
+  "mode": "paper_only_portfolio_risk_feedback_loop",
+  "input": {
+    "entry_router": "M125 required portfolio-risk-gated paper router JSON",
+    "marks": "One or more M117-compatible mark snapshot JSON files",
+    "optional_exit_router": "M121 paper exit-router JSON"
+  },
+  "loop_steps": [
+    "Build M119-compatible paper mark-to-market time-series from M125 positions and mark snapshots.",
+    "Build M122-compatible current paper portfolio state from entry fills, optional paper exits, and latest marks.",
+    "Build M123-compatible paper portfolio risk state from the current portfolio state.",
+    "Expose the M123-compatible risk state as the next M124 entry gate input."
+  ],
+  "latest_validation": {
+    "loop_run_id": "m126_20260630_m125_router_to_next_risk_gate",
+    "source_entry_router_run_id": "m125_20260630_m124_required_gate_router",
+    "mark_snapshot_count": 2,
+    "portfolio_state_run_id": "m126_20260630_m125_router_to_next_risk_gate_portfolio_state",
+    "portfolio_risk_run_id": "m126_20260630_m125_router_to_next_risk_gate_risk_state",
+    "risk_state": "within_limits",
+    "next_entry_gate_action": "allow_new_entries",
+    "new_entries_allowed": true,
+    "breach_count": 0,
+    "warning_count": 0,
+    "gross_exposure": 33.92,
+    "short_exposure": 24.64,
+    "total_pnl": 0.03,
+    "next_cycle_handoff_check": {
+      "ledger_run_id": "m126_20260630_next_cycle_handoff_check",
+      "pending_paper_execution_count": 10,
+      "blocked_by_portfolio_risk_state_count": 0
+    },
+    "outputs": {
+      "combined_loop": "exports/m126_m125_portfolio_risk_loop.json",
+      "timeseries": "exports/m126_m125_mark_timeseries.json",
+      "portfolio_state": "exports/m126_m125_portfolio_state.json",
+      "portfolio_risk_state_for_next_cycle": "exports/m126_m125_portfolio_risk_state.json"
+    }
+  },
+  "safety": {
+    "paper_only": true,
+    "ibkr_order_submitted": false,
+    "transmit_enabled": false,
+    "live_order_routing_enabled": false,
+    "portfolio_mutation_enabled": false,
+    "description": "M126 links simulated fills, paper marks, paper portfolio state, and paper risk state for next-cycle gating only. It does not call broker order APIs, submit orders, transmit orders, or mutate a real portfolio."
+  }
+}

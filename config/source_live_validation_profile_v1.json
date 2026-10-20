@@ -1,0 +1,51 @@
+{
+  "profile_version": "source-live-validation-profile-v1",
+  "milestone": "M161-M173",
+  "description": "M161-M173 read-only provider live validation for online-required market news and geopolitical signal sources. Checks IBKR/Benzinga/Dow Jones historical news and Marketaux without writing news or external-signal rows. IBKR/Benzinga transient farm warnings are separated from true provider degradation when fresh rows are returned. Marketaux external validation retries transient timeouts once before reporting an error. Alpha Vantage and GDELT are removed from the active validation path.",
+  "ibkr": {
+    "symbols": [
+      "SPY",
+      "QQQ",
+      "NVDA",
+      "TSM",
+      "XLE"
+    ],
+    "providers": [
+      "BZ",
+      "DJ-N",
+      "DJ-RT",
+      "DJ-RTA",
+      "DJ-RTE",
+      "DJ-RTG",
+      "DJNL"
+    ]
+  },
+  "external": {
+    "marketaux_symbols": [],
+    "marketaux_search": null,
+    "marketaux_filter_entities": false,
+    "alpha_tickers": [],
+    "alpha_topics": null
+  },
+  "validation": {
+    "limit": 10,
+    "ibkr_timeout_seconds": 25.0,
+    "external_timeout_seconds": 20.0,
+    "external_retry_count": 1,
+    "external_retry_sleep_seconds": 0.5,
+    "skip_ibkr": false,
+    "skip_marketaux": false,
+    "skip_alpha_vantage": true
+  },
+  "outputs": {
+    "output": "../exports/m161_source_live_validation.md",
+    "json_output_path": "../exports/m161_source_live_validation.json"
+  },
+  "safety": {
+    "read_only_provider_probe": true,
+    "news_rows_written": false,
+    "external_signal_rows_written": false,
+    "orders_submitted": false,
+    "transmit_enabled": false
+  }
+}

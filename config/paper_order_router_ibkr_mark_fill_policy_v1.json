@@ -1,0 +1,44 @@
+{
+  "policy_version": "paper-order-router-ibkr-mark-fill-policy-v1",
+  "milestone": "M118",
+  "mode": "paper_only_ibkr_mark_referenced_simulated_fills",
+  "input": {
+    "intent_source": "M114 execution intent ledger",
+    "mark_source": "M117 IBKR stock mark snapshot JSON",
+    "accepted_fill_price_source_modes": [
+      "local_estimate",
+      "marks_or_local_estimate",
+      "require_marks"
+    ],
+    "recommended_fill_price_source": "require_marks"
+  },
+  "fill_price_rules": {
+    "local_estimate": "Use M114 local notional estimate divided by paper quantity.",
+    "marks_or_local_estimate": "Use normalized mark price when available, otherwise local estimate.",
+    "require_marks": "Use normalized mark price only; skip intents whose symbol has no valid mark.",
+    "slippage": "Buy fills increase mark by slippage_bps; short-sale fills decrease mark by slippage_bps."
+  },
+  "validation": {
+    "router_output": "exports/m118_m114_paper_order_router_ibkr_mark_fills.json",
+    "same_mark_mtm_output": "exports/m118_m117_same_mark_paper_position_validation.json",
+    "paper_order_count": 10,
+    "paper_fill_count": 10,
+    "paper_position_count": 5,
+    "input_mark_count": 5,
+    "fill_reference_counts": {
+      "ibkr_last": 10
+    },
+    "same_mark_exit_signal_counts": {
+      "hold": 5
+    },
+    "same_mark_unrealized_pnl": 0.0
+  },
+  "safety": {
+    "paper_only": true,
+    "ibkr_order_submitted": false,
+    "transmit_enabled": false,
+    "live_order_routing_enabled": false,
+    "portfolio_mutation_enabled": false,
+    "description": "M118 uses read-only IBKR marks as simulated paper fill reference prices. It still does not call broker order APIs, submit orders, transmit orders, or mutate a real portfolio."
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "version": "news-subscription-mesh-profile-v1",
+  "description": "M235 News Subscription Mesh planner. Builds the core eligible universe and BroadTape-driven temporary subscription candidates without submitting orders or mutating broker state.",
+  "paths": {
+    "universe_json": "news_subscription_mesh_universe_v1.json",
+    "database_path": "../market_events.db"
+  },
+  "mesh": {
+    "lookback_minutes": 240,
+    "temp_ttl_minutes": 180,
+    "max_temp_symbols": 40,
+    "max_core_live_symbols": 175,
+    "min_temp_confidence": "medium",
+    "include_dow_jones_geopolitical_candidates": true,
+    "dow_jones_geopolitical_lookback_minutes": 720
+  },
+  "outputs": {
+    "output": "../exports/m235_news_subscription_mesh.md",
+    "json_output_path": "../exports/m235_news_subscription_mesh.json"
+  }
+}

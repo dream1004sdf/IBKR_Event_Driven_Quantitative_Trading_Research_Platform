@@ -1,0 +1,90 @@
+{
+  "policy_version": "paper-stock-option-strategy-allocation-policy-v1",
+  "created_at": "2026-06-29",
+  "mode": "read_only_paper_stock_option_strategy_allocation",
+  "purpose": "Choose how to express each stored scorer signal on paper: stock/short-stock proxy, single long option, or defined-risk debit spread.",
+  "selection_inputs": [
+    "predicted_direction",
+    "expected_return",
+    "confidence",
+    "horizon",
+    "trade_action",
+    "theoretical option strategy score",
+    "estimated return on risk"
+  ],
+  "evaluation_only_fields": [
+    "actual_excess_return",
+    "direction_hit",
+    "realized_pnl",
+    "allocation_regret",
+    "hindsight_best_expression"
+  ],
+  "supported_expressions": [
+    "stock_long",
+    "stock_short",
+    "long_call",
+    "long_put",
+    "bull_call_debit_spread",
+    "bear_put_debit_spread"
+  ],
+  "default_parameters": {
+    "underlying_reference_price": 100.0,
+    "stock_quantity": 10.0,
+    "stock_stop_loss_pct": 0.02,
+    "min_confidence": 0.35,
+    "min_stock_expected_return": 0.0025,
+    "min_dte": 7,
+    "base_implied_vol": 0.55,
+    "risk_free_rate": 0.04,
+    "contract_multiplier": 100.0,
+    "moneyness_offset_pct": 0.0,
+    "spread_width_pct": 0.05,
+    "min_option_score": 0.35,
+    "min_option_return_on_risk": 0.0,
+    "option_preference_edge": 0.05
+  },
+  "live_replay_evidence": {
+    "run_at": "2026-06-29T11:04:48Z",
+    "command": "python main.py replay-score-strategy-allocate --start 2025-01-01 --scorer-name openai --model-name gpt-5.4-mini --scorer-version openai-replay-score-v14-nuanced-v1 --price-source yahoo_chart_daily_adjclose --limit 1000 --underlying-reference-price 100 --stock-quantity 10 --stock-stop-loss-pct 0.02 --min-confidence 0.35 --min-stock-expected-return 0.0025 --min-dte 7 --base-implied-vol 0.55 --risk-free-rate 0.04 --contract-multiplier 100 --moneyness-offset-pct 0.0 --spread-width-pct 0.05 --min-option-score 0.35 --min-option-return-on-risk 0.0 --option-preference-edge 0.05",
+    "rows": 719,
+    "selected_allocations": 492,
+    "selection_rate": 0.6843,
+    "positive_realized": 293,
+    "evaluated_allocations": 492,
+    "positive_realized_rate": 0.5955,
+    "total_realized_pnl": 11734.86,
+    "avg_realized_pnl": 23.85,
+    "avg_allocation_regret": 25.49,
+    "selected_instrument_counts": {
+      "stock": 393,
+      "option": 99,
+      "blocked": 227
+    },
+    "selected_strategy_counts": {
+      "stock_long": 177,
+      "stock_short": 216,
+      "bull_call_debit_spread": 84,
+      "bear_put_debit_spread": 15,
+      "blocked": 227
+    },
+    "reports": [
+      "exports/m99_v14_nuanced_v1_stock_option_strategy_allocation.md",
+      "exports/m99_v14_nuanced_v1_stock_option_strategy_allocation.json"
+    ]
+  },
+  "safety": {
+    "paper_only": true,
+    "uses_live_option_chain": false,
+    "uses_live_option_quotes": false,
+    "ibkr_order_submitted": false,
+    "account_or_portfolio_checked": false,
+    "margin_checked": false,
+    "scorer_rows_mutated": false
+  },
+  "known_limitations": [
+    "Stock max loss uses a stop-loss proxy rather than simulated stop execution.",
+    "Option strategies are still theoretical Black-Scholes candidates and are not yet constrained by live bid/ask, open interest, implied-volatility surface, assignment, or margin.",
+    "Allocation regret is hindsight-only evaluation and must not be used as a signal-time selection input.",
+    "The current allocation policy selected fewer options than the pure theoretical options analyzer; M100 should tune expression selection with walk-forward validation."
+  ]
+}

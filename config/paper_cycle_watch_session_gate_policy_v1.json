@@ -1,0 +1,51 @@
+{
+  "policy_version": "paper-cycle-watch-session-gate-policy-v1",
+  "milestone": "M134",
+  "description": "Session-gated paper watch tick and finite runner execution.",
+  "paper_only": true,
+  "live_order_routing_enabled": false,
+  "ibkr_order_submitted": false,
+  "transmit_enabled": false,
+  "session_gate_contract": {
+    "profile_path": "config/paper_cycle_watch_session_profile_v1.json",
+    "gate_version": "paper-session-gate-v1",
+    "timezone": "America/New_York",
+    "allowed_sessions": [
+      "regular"
+    ],
+    "sessions": {
+      "pre_market": "04:00 <= local time < 09:30",
+      "regular": "09:30 <= local time < 16:00",
+      "after_hours": "16:00 <= local time < 20:00",
+      "closed": "outside configured sessions, weekends, or configured holidays"
+    },
+    "override": "--session-gate-now is for deterministic tests; --ignore-session-gate bypasses the configured gate explicitly."
+  },
+  "validation": {
+    "regular_runner_run_id": "m134_20260630_session_regular_runner",
+    "regular_session_gate_now": "2026-06-30T10:00:00-04:00",
+    "regular_ticks_completed": 2,
+    "regular_executed_tick_count": 1,
+    "regular_session_skipped_tick_count": 0,
+    "regular_total_new_paper_fills": 10,
+    "closed_runner_run_id": "m134_20260630_session_closed_runner",
+    "closed_session_gate_now": "2026-06-30T20:30:00-04:00",
+    "closed_ticks_completed": 2,
+    "closed_executed_tick_count": 0,
+    "closed_session_skipped_tick_count": 2,
+    "closed_total_new_paper_fills": 0,
+    "final_cumulative_paper_fills": 10,
+    "final_risk_state": "within_limits",
+    "outputs": {
+      "profile": "config/paper_cycle_watch_session_profile_v1.json",
+      "regular_runner_report": "exports/m134_session_regular_runner.md",
+      "regular_runner_json": "exports/m134_session_regular_runner.json",
+      "regular_tick_output_dir": "exports/m134_session_regular_ticks",
+      "closed_runner_report": "exports/m134_session_closed_runner.md",
+      "closed_runner_json": "exports/m134_session_closed_runner.json",
+      "closed_tick_output_dir": "exports/m134_session_closed_ticks",
+      "checkpoint": "exports/m134_session_runner_watch_checkpoint.json",
+      "watch_state": "exports/m134_session_runner_watch_state.json"
+    }
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "policy_version": "ibkr-order-preview-margin-whatif-v1",
+  "created_at": "2026-06-30",
+  "milestone": "M112",
+  "purpose": "Create a pre-order preview and margin what-if queue from M111 account-scaled paper tickets, then optionally request IBKR broker-side what-if margin preview with whatIf=true and transmit=false.",
+  "scope": {
+    "position_sizing_input": "exports/m111_m108_account_scaled_position_sizing.json",
+    "local_order_preview_report": "exports/m112_m111_order_preview.json",
+    "local_order_preview_markdown": "exports/m112_m111_order_preview.md",
+    "ibkr_whatif_report": "exports/m112_ibkr_order_whatif_preview.json",
+    "ibkr_whatif_markdown": "exports/m112_ibkr_order_whatif_preview.md"
+  },
+  "local_preview_result": {
+    "source_approved_ticket_count": 25,
+    "preview_item_count": 25,
+    "preview_status_counts": {
+      "preview_needs_human_review": 25
+    },
+    "ticket_type_counts": {
+      "stock": 25
+    },
+    "local_margin_totals": {
+      "estimated_initial_margin_change": 45.0,
+      "estimated_maintenance_margin_change": 41.0,
+      "estimated_cash_impact": -15.0
+    },
+    "human_review_reasons": {
+      "fractional_share_execution_support_requires_account_confirmation": 25,
+      "fractional_quantity_requires_ibkr_account_support_confirmation": 25,
+      "short_stock_requires_borrow_margin_and_account_review": 10,
+      "short_stock_requires_borrow_locate_and_margin_what_if": 10
+    }
+  },
+  "ibkr_live_whatif_probe": {
+    "attempted": true,
+    "requested_count": 1,
+    "response_count": 0,
+    "blocked_by_read_only_mode": true,
+    "observed_error_codes": [
+      2104,
+      2107,
+      2158,
+      321
+    ],
+    "interpretation": "Farm status messages were non-blocking. Error 321 showed the API interface is currently in read-only mode, so broker-side what-if margin response was not returned."
+  },
+  "interpretation": {
+    "status": "M112 local preview queue is ready. Broker-side IBKR what-if adapter is implemented but blocked by the current read-only IBKR API session.",
+    "finding": "All 25 account-sized paper tickets are previewable as stock what-if order drafts, but each still requires human review because fractional-share support must be confirmed; 10 also require short borrow/locate and short margin review.",
+    "recommendation": "Keep local preview queue as the pre-trade checklist. If broker-side what-if margin is required, enable an IBKR session mode that permits what-if order validation while keeping transmit=false, then re-run ibkr-order-whatif-preview."
+  },
+  "safety": {
+    "paper_only": true,
+    "local_preview_only_by_default": true,
+    "live_whatif_requires_explicit_command": true,
+    "what_if_only": true,
+    "transmit": false,
+    "ibkr_order_submitted": false,
+    "live_order_routing_enabled": false
+  }
+}

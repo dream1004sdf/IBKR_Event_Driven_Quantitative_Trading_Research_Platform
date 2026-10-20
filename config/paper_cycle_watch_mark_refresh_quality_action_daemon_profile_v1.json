@@ -1,0 +1,30 @@
+{
+  "profile_version": "paper-cycle-watch-daemon-profile-v1",
+  "milestone": "M140",
+  "description": "M140 finite daemon profile for mark-refresh quality-driven paper execution sizing actions.",
+  "watch_profile_json": "paper_cycle_watch_mark_refresh_quality_action_profile_v1.json",
+  "daemon": {
+    "max_batches": 3,
+    "ticks_per_batch": 1,
+    "batch_interval_seconds": 0.0,
+    "sleep_between_batches": false,
+    "runner_interval_seconds": 0.0,
+    "sleep_between_ticks": false,
+    "force_each_tick": false
+  },
+  "outputs": {
+    "output_dir": "../exports/m140_mark_refresh_quality_action_watch_daemon",
+    "daily_log_jsonl": "../exports/m140_mark_refresh_quality_action_watch_daemon_daily_log.jsonl",
+    "output": "../exports/m140_mark_refresh_quality_action_watch_daemon.md",
+    "json_output_path": "../exports/m140_mark_refresh_quality_action_watch_daemon.json"
+  },
+  "safety": {
+    "paper_only": true,
+    "mark_refresh_read_only_market_data": true,
+    "quality_actions_affect_paper_sizing_only": true,
+    "fallback_reuses_existing_paper_snapshots_only": true,
+    "live_order_routing_enabled": false,
+    "ibkr_order_submitted": false,
+    "transmit_enabled": false
+  }
+}

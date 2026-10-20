@@ -1,0 +1,52 @@
+{
+  "policy_name": "paper_options_analysis_policy_v1",
+  "policy_version": "0.14.0-m96-options-analysis",
+  "created_at": "2026-06-29",
+  "mode": "paper_only_theoretical_options_analysis",
+  "scorer": {
+    "scorer_name": "openai",
+    "model_name": "gpt-5.4-mini",
+    "scorer_version": "openai-replay-score-v14-nuanced-v1",
+    "price_source": "yahoo_chart_daily_adjclose"
+  },
+  "option_model_parameters": {
+    "underlying_reference_price": 100.0,
+    "min_dte": 7,
+    "base_implied_vol": 0.55,
+    "risk_free_rate": 0.04,
+    "contract_multiplier": 100.0,
+    "moneyness_offset_pct": 0.0,
+    "spread_width_pct": 0.05,
+    "min_option_score": 0.35
+  },
+  "supported_strategy_templates": [
+    "long_call",
+    "long_put",
+    "bull_call_debit_spread",
+    "bear_put_debit_spread"
+  ],
+  "safety": {
+    "paper_only": true,
+    "theoretical_model_only": true,
+    "uses_live_option_chain": false,
+    "ibkr_order_submitted": false,
+    "account_or_portfolio_checked": false,
+    "margin_checked": false,
+    "assignment_checked": false,
+    "liquidity_checked": false,
+    "live_order_router_enabled": false,
+    "notes": "Frozen candidate theoretical options analysis policy from M96. This is not option-chain selection or live-trading authorization."
+  },
+  "evidence": {
+    "source_report": "exports/m96_v14_nuanced_v1_options_analysis.md",
+    "source_json": "exports/m96_v14_nuanced_v1_options_analysis.json",
+    "rows": 719,
+    "option_candidates": 247,
+    "candidate_rate": 0.3435326842837274,
+    "positive_realized": 131,
+    "evaluated_candidates": 247,
+    "positive_realized_rate": 0.5303643724696356,
+    "total_realized_pnl": 15601.067417777726,
+    "avg_realized_pnl": 63.162216266306586
+  }
+}

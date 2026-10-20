@@ -1,0 +1,136 @@
+{
+  "profile_version": "paper-cycle-watch-profile-v1",
+  "milestone": "M137-M157-M175",
+  "description": "M137-M157-M175 calendar-gated watch profile with paper market-data quality preflight checks, automatic evidence refresh watchdog execution, evidence freshness/recovery preflight gating, and Market Data Risk Gate auto-gate rebuilding.",
+  "paths": {
+    "auto_gate_json": "../exports/m113_m112_auto_execution_gate.json",
+    "portfolio_risk_state_json": "../exports/m128_next_portfolio_risk_state.json",
+    "fill_marks_json": "../exports/m117_ibkr_stock_mark_snapshot.json",
+    "loop_marks_jsons": [
+      "../exports/m117_ibkr_stock_mark_snapshot.json",
+      "../exports/m119_ibkr_stock_mark_snapshot_refresh_1.json"
+    ],
+    "exit_router_json": "../exports/m121_m120_paper_exit_router.json",
+    "checkpoint_path": "../exports/m137_preflight_watch_checkpoint.json",
+    "watch_state_json": "../exports/m137_preflight_watch_state.json"
+  },
+  "session_gate": {
+    "enabled": true,
+    "calendar_json": "paper_market_calendar_us_v1.json",
+    "allowed_sessions": [
+      "regular"
+    ],
+    "weekdays": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ]
+  },
+  "preflight_gate": {
+    "enabled": true,
+    "ignore": false,
+    "max_snapshot_age_seconds": 28800.0,
+    "max_tick_age_seconds": 28800.0,
+    "allow_delayed": false,
+    "require_all_marked": true,
+    "min_marked_ratio": 1.0
+  },
+  "evidence_refresh_watchdog": {
+    "enabled": true,
+    "ignore": false,
+    "freshness_profile_json": "../config/evidence_freshness_desk_profile_v1.json",
+    "refresh_queue_profile_json": "../config/evidence_refresh_queue_profile_v1.json",
+    "freshness_report_json": "../exports/m152_evidence_freshness_desk.json",
+    "refresh_queue_json": "../exports/m153_evidence_refresh_queue_execute.json",
+    "refresh_queue_markdown": "../exports/m153_evidence_refresh_queue_execute.md",
+    "state_json_path": "../exports/m154_evidence_refresh_watchdog_state.json",
+    "tick_log_jsonl_path": "../exports/m157_evidence_refresh_watchdog_ticks.jsonl",
+    "output": "../exports/m157_evidence_refresh_watchdog_latest.md",
+    "json_output_path": "../exports/m157_evidence_refresh_watchdog_latest.json",
+    "max_ticks": 1,
+    "interval_seconds": 1.0,
+    "sleep_between_ticks": false,
+    "cooldown_seconds": 300.0,
+    "initial_backoff_seconds": 120.0,
+    "max_backoff_seconds": 1800.0,
+    "queue_timeout_seconds": 240.0,
+    "dry_run": false,
+    "skip_freshness_recheck": false
+  },
+  "evidence_preflight_gate": {
+    "enabled": true,
+    "ignore": false,
+    "freshness_report_json": "../exports/m152_evidence_freshness_desk.json",
+    "watchdog_state_json": "../exports/m154_evidence_refresh_watchdog_state.json",
+    "preflight_json_output_path": "../exports/m156_evidence_preflight_latest.json",
+    "preflight_output": "../exports/m156_evidence_preflight_latest.md",
+    "auto_gate_json_output_path": "../exports/m156_evidence_auto_gate_latest.json",
+    "auto_gate_output": "../exports/m156_evidence_auto_gate_latest.md",
+    "block_on_stale": true,
+    "block_on_offline": true,
+    "block_on_watchdog_failure": true,
+    "allow_lagging_with_haircut": true,
+    "lagging_size_multiplier": 0.5,
+    "min_source_weight": 0.25
+  },
+  "market_data_risk_gate": {
+    "enabled": true,
+    "ignore": false,
+    "market_data_json": "../exports/m153_market_data_desk_refresh.json",
+    "gate_json_output_path": "../exports/m175_market_data_risk_gate_latest.json",
+    "gate_output": "../exports/m175_market_data_risk_gate_latest.md",
+    "auto_gate_json_output_path": "../exports/m175_market_data_risk_auto_gate_latest.json",
+    "auto_gate_output": "../exports/m175_market_data_risk_auto_gate_latest.md",
+    "block_on_delayed": true,
+    "block_on_missing": true,
+    "block_on_warming_up": true,
+    "block_on_errors": true,
+    "block_on_stale": true,
+    "block_on_close_only": false,
+    "block_on_severe_wide_spread": false,
+    "watch_size_multiplier": 0.7,
+    "hot_size_multiplier": 0.5,
+    "defensive_size_multiplier": 0.0,
+    "stress_score_threshold": 30.0
+  },
+  "watch": {
+    "skip_unchanged_inputs": true,
+    "force_run": false,
+    "cycles_per_run": 1,
+    "dedupe_across_cycles": true,
+    "carry_dedupe_state_across_runs": true,
+    "max_intents": 10,
+    "sample_limit": 20
+  },
+  "execution": {
+    "fill_price_source": "require_marks",
+    "fill_model": "ibkr_mark_reference_fill_v1",
+    "max_orders": 10,
+    "slippage_bps": 0.0,
+    "commission_per_order": 0.0
+  },
+  "risk_limits": {
+    "monitor_size_multiplier": 0.5,
+    "take_profit_pct": 0.03,
+    "stop_loss_pct": 0.02,
+    "max_gross_exposure": 100000.0,
+    "max_symbol_exposure": 25000.0,
+    "max_short_exposure": 25000.0,
+    "max_unrealized_loss": 1000.0,
+    "max_total_loss": 1000.0,
+    "max_open_symbols": 25,
+    "warning_ratio": 0.8
+  },
+  "outputs": {
+    "output": "../exports/m137_preflight_default_tick.md",
+    "json_output_path": "../exports/m137_preflight_default_tick.json"
+  },
+  "safety": {
+    "paper_only": true,
+    "live_order_routing_enabled": false,
+    "ibkr_order_submitted": false,
+    "transmit_enabled": false
+  }
+}

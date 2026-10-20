@@ -1,0 +1,26 @@
+{
+  "profile_version": "evidence-freshness-desk-profile-v1",
+  "milestone": "M152",
+  "description": "Read-only freshness monitor for scorer/dashboard evidence sources. Stale sources are downweighted or blocked from latest-cause explanations.",
+  "paths": {
+    "database_path": "../market_events.db",
+    "market_data_json": "../exports/m153_market_data_desk_refresh.json",
+    "economic_desk_json": "../exports/m63_global_rates_economic_indicator_desk.json"
+  },
+  "outputs": {
+    "output": "../exports/m152_evidence_freshness_desk.md",
+    "json_output_path": "../exports/m152_evidence_freshness_desk.json"
+  },
+  "scorer_guard": {
+    "normal_when_fresh": true,
+    "downweight_when_lagging": true,
+    "do_not_use_stale_sources_as_latest_cause": true,
+    "standing_regime_stale_policy": "background_only_unconfirmed"
+  },
+  "safety": {
+    "read_only": true,
+    "scorer_rows_mutated": false,
+    "ibkr_order_submitted": false,
+    "transmit_enabled": false
+  }
+}

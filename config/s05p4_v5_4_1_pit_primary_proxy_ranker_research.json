@@ -1,0 +1,45 @@
+{
+  "version": "s05p4-v5.4.1-pit-primary-proxy-ranker-research-v1",
+  "mode": "clone_only_owner_accepted_provisional_ai_set_a",
+  "semantic_policy_config": "config/s05p4_semantic_v5_4_1_research.json",
+  "feature_policy": {
+    "lookback_completed_sessions": 20,
+    "minimum_completed_sessions": 10,
+    "maximum_last_session_age_calendar_days": 7,
+    "cutoff_policy": "strictly_before_event_new_york_session_date",
+    "price_source": "ibkr_historical_bars_daily_trades_rth",
+    "dollar_volume_floor": 100000.0,
+    "dollar_volume_ceiling": 10000000000.0,
+    "daily_trade_count_floor": 100.0,
+    "daily_trade_count_ceiling": 1000000.0,
+    "daily_high_low_spread_ceiling": 0.04,
+    "spread_feature_semantics": "ohlcv_daily_high_low_spread_proxy_not_bid_ask",
+    "intraday_trade_coverage_semantics": "daily_trade_activity_proxy_not_continuous_minute_coverage",
+    "family_exposure_neutral_prior": 0.5,
+    "beta_purity_neutral_prior": 0.5,
+    "neutral_prior_reason": "no_independent_pre_event_exposure_or_beta_snapshot_available"
+  },
+  "adjudication_policy": {
+    "eligible_family_resolution_prefix": "resolved_",
+    "resolved_family_confidence": 1.0,
+    "authority": "owner_accepted_provisional_research_only_not_official_human"
+  },
+  "selection_policy": {
+    "require_all_family_candidates_complete": true,
+    "enforce_v5_primary_proxy_confidence_threshold": true,
+    "missing_candidate_action": "abstain",
+    "below_margin_action": "abstain",
+    "below_confidence_action": "abstain"
+  },
+  "safety": {
+    "post_event_features_forbidden": true,
+    "same_event_session_daily_bar_forbidden": true,
+    "set_b_released": false,
+    "canonical_promotion": false,
+    "m254_m255_m256": false,
+    "orders": false,
+    "transmit": false,
+    "live_routing": false,
+    "threshold_promotion": false
+  }
+}

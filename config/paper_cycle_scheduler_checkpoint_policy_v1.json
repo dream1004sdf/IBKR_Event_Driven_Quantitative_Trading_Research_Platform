@@ -1,0 +1,40 @@
+{
+  "policy_version": "paper-cycle-scheduler-checkpoint-policy-v1",
+  "milestone": "M130",
+  "description": "Restart-safe checkpoint handoff for the finite paper-only cycle scheduler.",
+  "paper_only": true,
+  "live_order_routing_enabled": false,
+  "ibkr_order_submitted": false,
+  "transmit_enabled": false,
+  "resume_contract": {
+    "checkpoint_version": "paper-cycle-scheduler-checkpoint-v1",
+    "resume_state_version": "paper-cycle-scheduler-resume-state-v1",
+    "restored_fields": [
+      "next_portfolio_risk_state",
+      "existing_ledger",
+      "existing_router",
+      "runs_completed_total",
+      "next_scheduler_tick_index"
+    ],
+    "manual_override": "Explicit --existing-ledger-json or --existing-router-json values override checkpoint ledger/router state."
+  },
+  "validation": {
+    "seed_run_id": "m130_20260630_checkpoint_seed",
+    "resume_run_id": "m130_20260630_checkpoint_resume",
+    "seed_new_paper_fills": 10,
+    "resume_new_paper_fills": 0,
+    "resume_final_cumulative_paper_fills": 10,
+    "resume_prior_runs_completed": 1,
+    "resume_runs_completed_total": 2,
+    "resume_final_risk_state": "within_limits",
+    "resume_final_gate_action": "allow_new_entries",
+    "outputs": {
+      "seed_report": "exports/m130_checkpoint_seed_scheduler.md",
+      "seed_json": "exports/m130_checkpoint_seed_scheduler.json",
+      "seed_checkpoint": "exports/m130_paper_cycle_scheduler_checkpoint.json",
+      "resume_report": "exports/m130_checkpoint_resume_scheduler.md",
+      "resume_json": "exports/m130_checkpoint_resume_scheduler.json",
+      "resume_checkpoint": "exports/m130_paper_cycle_scheduler_checkpoint_after_resume.json"
+    }
+  }
+}

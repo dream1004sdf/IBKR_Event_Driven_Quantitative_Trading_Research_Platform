@@ -1,0 +1,52 @@
+{
+  "policy_version": "paper-multi-cycle-runner-policy-v1",
+  "milestone": "M128",
+  "mode": "paper_only_multi_cycle_runner",
+  "input": {
+    "auto_gate": "M113 autonomous execution gate JSON",
+    "initial_portfolio_risk_state": "M123/M126/M127-compatible paper portfolio risk-state JSON",
+    "fill_marks": "M117-compatible mark snapshot JSON for entry fill reference prices",
+    "loop_marks": "One or more M117-compatible mark snapshot JSON files for every post-fill mark-to-market loop",
+    "optional_exit_router": "M121 paper exit-router JSON"
+  },
+  "cycle_behavior": {
+    "risk_state_handoff": true,
+    "cumulative_paper_portfolio_accounting": true,
+    "dedupe_across_cycles_supported": true,
+    "default_cycle_count": 3,
+    "description": "Each cycle uses the previous cycle's next portfolio risk state as the next cycle's entry gate input. Simulated fills are aggregated before risk evaluation so risk is based on the cumulative paper portfolio."
+  },
+  "latest_validation": {
+    "multi_cycle_run_id": "m128_20260630_three_cycle_deduped_runner",
+    "cycle_count_completed": 3,
+    "dedupe_across_cycles": true,
+    "cycle_new_fills": [
+      10,
+      0,
+      0
+    ],
+    "final_cumulative_paper_fills": 10,
+    "final_risk_state": "within_limits",
+    "final_gate_action": "allow_new_entries",
+    "final_gross_exposure": 33.92,
+    "final_short_exposure": 24.64,
+    "final_total_pnl": 0.03,
+    "next_cycle_handoff_check": {
+      "ledger_run_id": "m128_20260630_next_cycle_handoff_check",
+      "pending_paper_execution_count": 10,
+      "blocked_by_portfolio_risk_state_count": 0
+    },
+    "outputs": {
+      "combined_multi_cycle": "exports/m128_three_cycle_deduped_runner.json",
+      "next_portfolio_risk_state": "exports/m128_next_portfolio_risk_state.json"
+    }
+  },
+  "safety": {
+    "paper_only": true,
+    "ibkr_order_submitted": false,
+    "transmit_enabled": false,
+    "live_order_routing_enabled": false,
+    "portfolio_mutation_enabled": false,
+    "description": "M128 repeats paper-only cycles with risk-state handoff and cumulative paper accounting. It does not call broker order APIs, submit orders, transmit orders, or mutate a real portfolio."
+  }
+}

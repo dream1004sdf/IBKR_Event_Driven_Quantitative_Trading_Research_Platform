@@ -1,0 +1,83 @@
+{
+  "version": "s05p4-independent-human-semantic-review-v1",
+  "codebook_version": "s05p4-independent-semantic-codebook-v1",
+  "split": {
+    "set_a_count": 400,
+    "set_b_count": 145,
+    "stratify_by": [
+      "provider",
+      "proxy_family",
+      "calendar_quarter"
+    ],
+    "set_b_release_policy": "release_only_after_set_a_phase_gate_pass"
+  },
+  "promotion_gates": {
+    "causal_assignment_precision_min": 0.95,
+    "proxy_family_precision_min": 0.95,
+    "primary_proxy_precision_min": 0.9,
+    "critical_retained_region_channel_errors_max": 0,
+    "unresolved_reviewer_conflicts_max": 0,
+    "outcome_visible_rows_max": 0,
+    "design_rows_in_independent_metrics_max": 0,
+    "human_rejected_semantic_strict_labels_max": 0,
+    "same_config_rerun_diff_max": 0,
+    "canonical_source_unchanged": true
+  },
+  "human_review_fields": [
+    "human_causal_eligible",
+    "human_primary_event",
+    "human_content_type_correct",
+    "human_region_correct",
+    "human_direction_correct",
+    "human_affected_channel_correct",
+    "human_proxy_family_correct",
+    "human_primary_proxy_correct",
+    "human_duplicate_or_update",
+    "human_exclusion_reason",
+    "reviewer_confidence",
+    "reviewer_id",
+    "reviewed_at"
+  ],
+  "review_policy": {
+    "boolean_values": [0, 1],
+    "confidence_values": [1, 2, 3, 4, 5],
+    "ambiguous_or_unclear": {
+      "missing_values_allowed": false,
+      "causal_treatment": "human_causal_eligible=0 with human_exclusion_reason=insufficient_context",
+      "correctness_treatment": "use 0 only for fields that cannot be confirmed from the packet",
+      "duplicate_treatment": "use 1 only for headline-local update/repeat evidence; otherwise 0",
+      "confidence_treatment": "reviewer_confidence=1 or 2",
+      "metric_treatment": "remain in denominators"
+    },
+    "reviewer_conflict": {
+      "majority_vote": false,
+      "metric_treatment": "exclude unresolved row and fail phase",
+      "resolution": "separate documented adjudication and final consolidated output",
+      "original_reviews_preserved": true
+    },
+    "exclusion_reason_vocabulary": [
+      "market_recap",
+      "price_move_recap",
+      "preview",
+      "opinion_or_analysis",
+      "listicle",
+      "duplicate_or_repeat",
+      "secondary_report_no_new_information",
+      "non_material_commentary",
+      "wrong_region_or_channel",
+      "wrong_proxy_family",
+      "wrong_primary_proxy",
+      "insufficient_context",
+      "other"
+    ]
+  },
+  "safety": {
+    "clone_only": true,
+    "canonical_promotion": false,
+    "m254_m255_m256": false,
+    "orders": false,
+    "transmit": false,
+    "live_routing": false,
+    "threshold_promotion": false
+  }
+}

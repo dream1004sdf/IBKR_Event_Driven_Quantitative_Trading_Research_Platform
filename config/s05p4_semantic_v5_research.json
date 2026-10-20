@@ -1,0 +1,39 @@
+{
+  "version": "s05p4-semantic-mapping-v5-research",
+  "mode": "research_only_no_promotion",
+  "thresholds": {
+    "region_confidence": 0.9,
+    "channel_confidence": 0.9,
+    "proxy_family_confidence": 0.9,
+    "event_direction_confidence": 0.85,
+    "primary_proxy_confidence": 0.9,
+    "family_minimum": 0.8,
+    "proxy_score_minimum": 0.65,
+    "proxy_top1_top2_margin": 0.06,
+    "learned_direction_confidence": 0.85
+  },
+  "production_targets": {
+    "tier_a_precision": 0.97,
+    "critical_region_channel_errors": 0,
+    "primary_proxy_precision": 0.95,
+    "high_confidence_direction_precision": 0.9
+  },
+  "small_sample_families_watch_only": [
+    "china_taiwan",
+    "semis_supply",
+    "cybersecurity",
+    "grain_supply",
+    "korea_risk"
+  ],
+  "safety": {
+    "direction_requires_learned_sign_agreement": true,
+    "mixed_or_unclear_direction_is_observation_only": true,
+    "post_event_ranking_features_forbidden": true,
+    "canonical_promotion": false,
+    "m254_m255_m256": false,
+    "orders": false,
+    "transmit": false,
+    "live_routing": false,
+    "threshold_promotion": false
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "policy_version": "paper-entry-risk-gate-policy-v1",
+  "milestone": "M124",
+  "mode": "paper_only_portfolio_risk_gated_entry_intents",
+  "input": {
+    "auto_gate_source": "M113 autonomous execution gate JSON",
+    "portfolio_risk_source": "Optional M123 paper portfolio risk-state JSON"
+  },
+  "portfolio_risk_state_actions": {
+    "within_limits": {
+      "action": "allow_new_entries",
+      "entry_size_multiplier": 1.0,
+      "description": "New pending paper execution intents are allowed normally."
+    },
+    "monitor": {
+      "action": "allow_with_monitor_haircut",
+      "default_entry_size_multiplier": 0.5,
+      "description": "New pending paper execution intents are allowed but quantity and local margin estimates are reduced by the configured monitor multiplier."
+    },
+    "reduce_risk": {
+      "action": "block_new_entries",
+      "entry_size_multiplier": 0.0,
+      "description": "New paper entry intents are recorded as blocked_by_portfolio_risk_state and are not consumable by the paper router."
+    },
+    "unknown": {
+      "action": "block_new_entries",
+      "entry_size_multiplier": 0.0,
+      "description": "Unknown or malformed risk state fails closed."
+    }
+  },
+  "latest_validation": {
+    "ledger_run_id": "m124_20260630_m123_risk_gated_entry_intents",
+    "source_risk_run_id": "m123_20260630_m122_portfolio_risk_state",
+    "source_portfolio_risk_state": "within_limits",
+    "source_auto_ready_count": 10,
+    "intent_count": 10,
+    "pending_paper_execution_count": 10,
+    "blocked_by_portfolio_risk_state_count": 0,
+    "portfolio_risk_gate_action": "allow_new_entries",
+    "router_compatibility_run_id": "m124_20260630_risk_gated_router_compat",
+    "router_compatibility_paper_fills": 10,
+    "output": "exports/m124_m113_m123_risk_gated_execution_intent_ledger.json"
+  },
+  "safety": {
+    "paper_only": true,
+    "ibkr_order_submitted": false,
+    "transmit_enabled": false,
+    "live_order_routing_enabled": false,
+    "portfolio_mutation_enabled": false,
+    "description": "M124 only gates and records paper execution intents before simulated paper routing. It does not call broker order APIs, submit orders, transmit orders, or mutate a real portfolio."
+  }
+}

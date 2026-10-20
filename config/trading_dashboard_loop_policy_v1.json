@@ -1,0 +1,40 @@
+{
+  "policy_version": "trading-dashboard-loop-policy-v1",
+  "milestone": "M145",
+  "description": "Read-only dashboard artifact refresh loop policy for repeatedly rebuilding M143 snapshot JSON/Markdown and M144 browser HTML.",
+  "dashboard_profile_json": "config/trading_dashboard_snapshot_profile_v1.json",
+  "input_contract": "trading-dashboard-snapshot-v1",
+  "html_contract": "trading-dashboard-html-v1",
+  "loop_contract": "trading-dashboard-loop-v1",
+  "default_max_ticks": 3,
+  "default_interval_seconds": 1.0,
+  "default_sleep_between_ticks": false,
+  "continuous_mode": {
+    "enabled_by_max_ticks": 0,
+    "requires_external_interrupt": true,
+    "recommended_operator_mode": "use --sleep-between-ticks with interval_seconds >= 1 for live dashboard operation"
+  },
+  "per_tick_outputs": [
+    "m143 dashboard snapshot JSON",
+    "m143 dashboard snapshot Markdown",
+    "m144 command-center HTML",
+    "m145 append-only tick JSONL row"
+  ],
+  "summary_outputs": [
+    "m145 loop summary JSON",
+    "m145 loop summary Markdown"
+  ],
+  "safety": {
+    "read_only_dashboard_loop": true,
+    "paper_only_control_surface": true,
+    "ibkr_order_submitted": false,
+    "transmit_enabled": false,
+    "live_order_routing_enabled": false
+  },
+  "future_refresh_hooks": [
+    "read-only IBKR account snapshot refresh",
+    "read-only market mark refresh",
+    "news/geopolitical source refresh",
+    "economic indicator source refresh"
+  ]
+}

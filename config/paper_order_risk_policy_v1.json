@@ -1,0 +1,44 @@
+{
+  "policy_name": "paper_order_risk_policy_v1",
+  "policy_version": "0.14.0-m94-paper-risk-layer",
+  "created_at": "2026-06-29",
+  "mode": "paper_only",
+  "scorer": {
+    "scorer_name": "openai",
+    "model_name": "gpt-5.4-mini",
+    "scorer_version": "openai-replay-score-v14-nuanced-v1",
+    "price_source": "yahoo_chart_daily_adjclose"
+  },
+  "paper_order_parameters": {
+    "min_confidence": 0.35,
+    "normal_size": 1.25,
+    "haircut_size_multiplier": 0.75,
+    "base_quantity": 1.0
+  },
+  "risk_limits": {
+    "max_total_gross_quantity": 300.0,
+    "max_symbol_gross_quantity": 12.0,
+    "max_side_gross_quantity": 175.0,
+    "max_symbol_orders": 10,
+    "max_symbol_day_orders": 1,
+    "min_abs_expected_return": 0.0025,
+    "reduce_to_fit_capacity": true,
+    "min_reduced_quantity": 0.01
+  },
+  "safety": {
+    "paper_only": true,
+    "ibkr_order_submitted": false,
+    "account_or_portfolio_checked": false,
+    "live_order_router_enabled": false,
+    "notes": "Frozen candidate paper risk policy from M94. This is not live-trading authorization."
+  },
+  "evidence": {
+    "source_report": "exports/m94_v14_nuanced_v1_paper_risk_layer.md",
+    "source_json": "exports/m94_v14_nuanced_v1_paper_risk_layer.json",
+    "rows": 719,
+    "pre_risk_candidates": 475,
+    "post_risk_candidates": 163,
+    "post_risk_accuracy": 0.6012269938650306,
+    "post_risk_avg_weighted_signed_excess_return": 0.023159066573398782
+  }
+}

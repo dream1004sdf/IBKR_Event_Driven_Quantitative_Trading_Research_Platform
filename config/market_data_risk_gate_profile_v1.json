@@ -1,0 +1,81 @@
+{
+  "paths": {
+    "market_data_json": "../exports/m153_market_data_desk_refresh.json",
+    "macro_release_interpreter_json": "../exports/m237_macro_release_interpreter.json",
+    "options_market_structure_json": "../exports/m217_options_market_structure_desk.json",
+    "options_market_structure_supervisor_json": "../exports/m219_options_market_structure_supervisor.json"
+  },
+  "gate": {
+    "block_on_delayed": true,
+    "block_on_missing": true,
+    "block_on_warming_up": true,
+    "block_on_errors": true,
+    "block_on_stale": true,
+    "stale_hard_block_policy": "core_tradeable_only",
+    "stale_hard_block_instruments": [
+      "DXY",
+      "USDJPY",
+      "US02Y",
+      "US10Y",
+      "VIX",
+      "VXX",
+      "ES",
+      "NQ",
+      "RTY",
+      "SPY",
+      "QQQ",
+      "IWM",
+      "WTI"
+    ],
+    "regular_session_only_stale_hard_block_instruments": [
+      "US02Y",
+      "US10Y",
+      "VIX",
+      "VXX"
+    ],
+    "monitoring_only_instruments": [
+      "KOSPI",
+      "KOSPI_FUT",
+      "KOSDAQ",
+      "NIKKEI",
+      "USDKRW",
+      "USDCNH",
+      "GBPUSD",
+      "SI",
+      "BTC",
+      "ETH",
+      "BRENT",
+      "UVXY",
+      "EWY",
+      "US03M",
+      "US30Y",
+      "VVIX"
+    ],
+    "block_on_close_only": false,
+    "block_on_severe_wide_spread": false,
+    "watch_size_multiplier": 0.7,
+    "hot_size_multiplier": 0.5,
+    "defensive_size_multiplier": 0.0,
+    "stress_score_threshold": 30.0,
+    "closed_session_expected_stale_min_wait_hours": 24.0,
+    "macro_event_window_minutes": 180.0,
+    "stale_hard_block_proxy_groups": [
+      {
+        "primary": "US02Y",
+        "label": "US 2Y Treasury live proxy group",
+        "members": [
+          "US02Y",
+          "UTWO",
+          "SHY",
+          "US02Y_2YY",
+          "US02Y_ZT"
+        ],
+        "require_all_stale": true
+      }
+    ]
+  },
+  "outputs": {
+    "output": "../exports/m174_market_data_risk_gate.md",
+    "json_output_path": "../exports/m174_market_data_risk_gate.json"
+  }
+}

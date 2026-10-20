@@ -1,0 +1,36 @@
+{
+  "policy_version": "paper-cycle-watch-runner-policy-v1",
+  "milestone": "M133",
+  "description": "Finite profile-backed paper watch-tick runner for operational dry-runs.",
+  "paper_only": true,
+  "live_order_routing_enabled": false,
+  "ibkr_order_submitted": false,
+  "transmit_enabled": false,
+  "runner_contract": {
+    "command": "replay-score-paper-cycle-watch-runner",
+    "profile_path": "config/paper_cycle_watch_runner_profile_v1.json",
+    "max_ticks": "finite only",
+    "sleep_between_ticks": "disabled unless explicitly set",
+    "per_tick_outputs": "Each runner tick writes its own Markdown and JSON report under output_dir.",
+    "checkpoint_handoff": "Each tick uses the profile checkpoint/watch-state files, so duplicate paper fills are avoided across repeated runner invocations."
+  },
+  "validation": {
+    "runner_run_id": "m133_20260630_profile_watch_runner",
+    "max_ticks": 3,
+    "ticks_completed": 3,
+    "executed_tick_count": 1,
+    "skipped_tick_count": 2,
+    "total_new_paper_fills": 10,
+    "final_cumulative_paper_fills": 10,
+    "final_risk_state": "within_limits",
+    "final_gate_action": "allow_new_entries",
+    "outputs": {
+      "profile": "config/paper_cycle_watch_runner_profile_v1.json",
+      "runner_report": "exports/m133_profile_watch_runner.md",
+      "runner_json": "exports/m133_profile_watch_runner.json",
+      "tick_output_dir": "exports/m133_runner_ticks",
+      "checkpoint": "exports/m133_runner_watch_checkpoint.json",
+      "watch_state": "exports/m133_runner_watch_state.json"
+    }
+  }
+}

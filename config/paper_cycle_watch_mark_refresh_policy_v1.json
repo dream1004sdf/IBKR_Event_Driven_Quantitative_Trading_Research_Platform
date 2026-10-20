@@ -1,0 +1,45 @@
+{
+  "policy_version": "paper-cycle-watch-mark-refresh-policy-v1",
+  "milestone": "M138",
+  "description": "Read-only stock mark refresh gate before M137 paper market-data preflight and scheduler execution.",
+  "watch_profile_json": "config/paper_cycle_watch_mark_refresh_profile_v1.json",
+  "daemon_profile_json": "config/paper_cycle_watch_mark_refresh_daemon_profile_v1.json",
+  "required_behavior": [
+    "Evaluate the calendar/session gate before requesting or copying market data.",
+    "When the tick is session-allowed, refresh the paper stock mark snapshot before computing the watch input signature and before running the data-quality preflight gate.",
+    "In operational mode, use read-only IBKR market data via the stock mark snapshot adapter and write refreshed paper snapshot JSON files for fill and loop marks.",
+    "If required mark refresh fails, block scheduler execution as skipped_mark_refresh_gate unless force-run is explicitly enabled.",
+    "Expose mark-refresh status in watch tick, runner, daemon, Markdown, and JSON outputs."
+  ],
+  "default_mark_refresh": {
+    "enabled": true,
+    "required": true,
+    "mode": "ibkr",
+    "quote_seconds": 8.0,
+    "market_data_type": 1,
+    "client_id_offset": 9400,
+    "write_fill_marks_json": true,
+    "write_loop_marks_jsons": true
+  },
+  "validation_cases": [
+    {
+      "name": "copy_existing_refresh_passes_preflight",
+      "override": "--mark-refresh-mode copy_existing",
+      "expected_mark_refresh_status": "pass",
+      "expected_preflight_status": "pass",
+      "expected_action": "executed_scheduler_tick"
+    },
+    {
+      "name": "required_refresh_failure_blocks",
+      "expected_mark_refresh_status": "block",
+      "expected_action": "skipped_mark_refresh_gate"
+    }
+  ],
+  "safety": {
+    "paper_only": true,
+    "read_only_market_data_refresh": true,
+    "live_order_routing_enabled": false,
+    "ibkr_order_submitted": false,
+    "transmit_enabled": false
+  }
+}

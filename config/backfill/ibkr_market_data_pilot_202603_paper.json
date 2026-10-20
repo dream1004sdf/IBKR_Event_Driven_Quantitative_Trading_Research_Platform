@@ -1,0 +1,54 @@
+{
+  "pilot_version": "ibkr-market-data-pilot-v1",
+  "paths": {
+    "source_database": "work/canonical_research_backfill/m254_canonical_20250101_20260706_v1/canonical_market_events.db",
+    "cache_database": "work/market_data_pilot/ibkr_paper_202603/ibkr_historical_cache.db",
+    "audit_json": "artifacts/audit/ibkr_paper_market_data_pilot_202603.json",
+    "audit_markdown": "artifacts/audit/ibkr_paper_market_data_pilot_202603.md"
+  },
+  "window": {
+    "start_utc": "2026-03-01T00:00:00+00:00",
+    "end_utc": "2026-04-01T00:00:00+00:00"
+  },
+  "gateway": {
+    "host": "127.0.0.1",
+    "port": 4002,
+    "daily_client_id": 1192,
+    "intraday_client_id": 1193,
+    "account_mode": "paper"
+  },
+  "daily": {
+    "buffer_days_before": 7,
+    "buffer_days_after": 10,
+    "what_to_show": "TRADES",
+    "use_rth": true
+  },
+  "intraday": {
+    "bar_size": "5 mins",
+    "minutes_before": 60,
+    "hours_after": 36,
+    "what_to_show": "TRADES",
+    "use_rth": false
+  },
+  "universe": {
+    "base_symbols": ["SPY", "QQQ", "IWM", "TLT", "IEF", "SHY", "UUP", "GLD"],
+    "source_symbols": {
+      "federal_reserve": ["DIA"],
+      "ecb": ["VGK", "FEZ", "EUFN", "FXE"],
+      "boj": ["EWJ", "DXJ", "FXY"]
+    }
+  },
+  "runtime": {
+    "timeout_seconds": 45,
+    "max_attempts": 2,
+    "retry_delay_seconds": 3,
+    "request_pause_seconds": 0.75
+  },
+  "safety": {
+    "read_only_historical_data_only": true,
+    "broker_orders_allowed": false,
+    "transmit_allowed": false,
+    "live_routing_allowed": false,
+    "s05_or_m253_allowed": false
+  }
+}

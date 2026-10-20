@@ -1,0 +1,35 @@
+{
+  "policy_version": "paper-exit-router-policy-v1",
+  "milestone": "M121",
+  "mode": "paper_only_exit_router_simulated_close_fills",
+  "input": {
+    "source": "M120 paper exit-intent ledger JSON",
+    "accepted_intent_state": "pending_paper_exit",
+    "duplicate_key": "exit_intent_id"
+  },
+  "fill_rules": {
+    "default_fill_model": "immediate_mark_close_fill_v1",
+    "reference_price": "M120 exit intent mark_price",
+    "sell_slippage": "fill_price = mark_price * (1 - slippage_bps / 10000)",
+    "buy_to_cover_slippage": "fill_price = mark_price * (1 + slippage_bps / 10000)",
+    "realized_pnl": "mark_unrealized_pnl + slippage_pnl_adjustment - commission_per_exit"
+  },
+  "latest_validation": {
+    "router_run_id": "m121_20260630_m120_exit_router",
+    "source_exit_ledger_run_id": "m120_20260630_m119_exit_intent_ledger",
+    "source_exit_intent_count": 0,
+    "paper_exit_order_count": 0,
+    "paper_exit_fill_count": 0,
+    "realized_pnl_row_count": 0,
+    "realized_pnl": 0.0,
+    "output": "exports/m121_m120_paper_exit_router.json"
+  },
+  "safety": {
+    "paper_only": true,
+    "ibkr_order_submitted": false,
+    "transmit_enabled": false,
+    "live_order_routing_enabled": false,
+    "portfolio_mutation_enabled": false,
+    "description": "M121 creates simulated paper close fills and realized PnL ledger rows only. It does not close real positions, call broker order APIs, submit orders, transmit orders, or mutate a real portfolio."
+  }
+}

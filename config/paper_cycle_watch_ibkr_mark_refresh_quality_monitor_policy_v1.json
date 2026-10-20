@@ -1,0 +1,44 @@
+{
+  "policy_version": "paper-cycle-watch-ibkr-mark-refresh-quality-monitor-policy-v1",
+  "milestone": "M142",
+  "description": "Repeated live IBKR stock mark-refresh monitor that aggregates mark quality, fallback use, and paper-only quality actions across ticks.",
+  "watch_profile_json": "config/paper_cycle_watch_ibkr_mark_refresh_quality_monitor_profile_v1.json",
+  "daemon_profile_json": "config/paper_cycle_watch_ibkr_mark_refresh_quality_monitor_daemon_profile_v1.json",
+  "required_behavior": [
+    "Run repeated finite daemon batches during the allowed market session.",
+    "Attempt read-only IBKR stock mark refresh on each session-allowed tick.",
+    "Accumulate refresh pass/warn/block counts, policy status counts, quality action counts, delayed row counts, missing mark counts, and fallback symbol usage.",
+    "Append each batch and final summary to daily JSONL so the monitor can be reviewed after the session.",
+    "Keep M137 preflight and M140 paper-only quality actions active for each tick.",
+    "Never submit, stage, preview, transmit, close, or mutate real broker positions."
+  ],
+  "default_monitor": {
+    "max_batches": 5,
+    "batch_interval_seconds": 60.0,
+    "market_data_type": 1,
+    "quote_seconds": 8.0,
+    "client_id_offset": 9600
+  },
+  "validation_cases": [
+    {
+      "name": "short_repeated_live_monitor_validation",
+      "override": "--max-batches 2 --batch-interval-seconds 0",
+      "expected_quality_summary_fields": [
+        "refresh_status_counts",
+        "policy_status_counts",
+        "quality_action_counts",
+        "delayed_row_count",
+        "missing_mark_count",
+        "fallback_tick_count"
+      ]
+    }
+  ],
+  "safety": {
+    "paper_only": true,
+    "read_only_market_data_refresh": true,
+    "quality_actions_affect_paper_sizing_only": true,
+    "live_order_routing_enabled": false,
+    "ibkr_order_submitted": false,
+    "transmit_enabled": false
+  }
+}

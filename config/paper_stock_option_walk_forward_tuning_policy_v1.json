@@ -1,0 +1,113 @@
+{
+  "policy_version": "paper-stock-option-walk-forward-tuning-policy-v1",
+  "created_at": "2026-06-29",
+  "mode": "read_only_walk_forward_stock_option_strategy_allocation_tuning",
+  "purpose": "Tune paper stock/option expression allocation parameters on prior replay rows and evaluate the selected parameters on later replay rows.",
+  "temporal_rule": {
+    "train": "Only rows before each test window may be used to select parameters.",
+    "test": "Later rows are evaluated with the selected train-window parameters.",
+    "forbidden": "Do not use realized PnL, allocation regret, hindsight-best expression, or test-window outcomes as signal-time selection inputs."
+  },
+  "tuned_parameters": [
+    "min_confidence",
+    "min_stock_expected_return",
+    "min_option_score",
+    "min_option_return_on_risk",
+    "option_preference_edge"
+  ],
+  "fixed_parameters": {
+    "underlying_reference_price": 100.0,
+    "stock_quantity": 10.0,
+    "stock_stop_loss_pct": 0.02,
+    "min_dte": 7,
+    "base_implied_vol": 0.55,
+    "risk_free_rate": 0.04,
+    "contract_multiplier": 100.0,
+    "moneyness_offset_pct": 0.0,
+    "spread_width_pct": 0.05
+  },
+  "walk_forward_setup": {
+    "min_train_rows": 240,
+    "test_window_rows": 80,
+    "step_rows": 80,
+    "rolling_train_rows": null,
+    "min_confidence_grid": [
+      0.30,
+      0.35
+    ],
+    "min_stock_expected_return_grid": [
+      0.0025,
+      0.005
+    ],
+    "min_option_score_grid": [
+      0.30,
+      0.35,
+      0.40
+    ],
+    "min_option_return_on_risk_grid": [
+      0.0,
+      0.10
+    ],
+    "option_preference_edge_grid": [
+      0.05,
+      0.10
+    ],
+    "min_selection_rate": 0.45,
+    "pnl_weight": 0.35,
+    "regret_penalty_weight": 0.25,
+    "option_usage_penalty_weight": 0.05
+  },
+  "live_replay_evidence": {
+    "run_at": "2026-06-29T11:17:03Z",
+    "command": "python main.py replay-score-strategy-walk-forward-tune --start 2025-01-01 --scorer-name openai --model-name gpt-5.4-mini --scorer-version openai-replay-score-v14-nuanced-v1 --price-source yahoo_chart_daily_adjclose --limit 1000 --min-train-rows 240 --test-window-rows 80 --step-rows 80 --underlying-reference-price 100 --stock-quantity 10 --stock-stop-loss-pct 0.02 --min-confidence-grid 0.30,0.35 --min-stock-expected-return-grid 0.0025,0.005 --min-option-score-grid 0.30,0.35,0.40 --min-option-return-on-risk-grid 0.0,0.10 --option-preference-edge-grid 0.05,0.10 --min-dte 7 --base-implied-vol 0.55 --risk-free-rate 0.04 --contract-multiplier 100 --moneyness-offset-pct 0.0 --spread-width-pct 0.05 --min-selection-rate 0.45 --pnl-weight 0.35 --regret-penalty-weight 0.25 --option-usage-penalty-weight 0.05 --top-n 5",
+    "rows": 719,
+    "fold_count": 6,
+    "aggregate_test_rows": 479,
+    "aggregate_test_selected_allocations": 301,
+    "aggregate_test_selection_rate": 0.6284,
+    "aggregate_test_positive_realized": 179,
+    "aggregate_test_evaluated_allocations": 301,
+    "aggregate_test_positive_realized_rate": 0.5947,
+    "aggregate_test_total_pnl": 9882.52,
+    "aggregate_test_avg_pnl": 32.83,
+    "aggregate_test_avg_regret": 17.20,
+    "aggregate_test_instrument_split": {
+      "stock": 231,
+      "option": 70,
+      "blocked": 178
+    },
+    "aggregate_test_strategy_split": {
+      "stock_long": 107,
+      "stock_short": 124,
+      "bull_call_debit_spread": 66,
+      "bear_put_debit_spread": 4,
+      "blocked": 178
+    },
+    "dominant_selected_params": {
+      "min_confidence": 0.35,
+      "min_stock_expected_return": 0.005,
+      "min_option_score": 0.30,
+      "min_option_return_on_risk": 0.10,
+      "option_preference_edge": 0.05
+    },
+    "reports": [
+      "exports/m100_v14_nuanced_v1_stock_option_walk_forward_tuning.md",
+      "exports/m100_v14_nuanced_v1_stock_option_walk_forward_tuning.json"
+    ]
+  },
+  "safety": {
+    "paper_only": true,
+    "uses_live_option_chain": false,
+    "uses_live_option_quotes": false,
+    "ibkr_order_submitted": false,
+    "account_or_portfolio_checked": false,
+    "margin_checked": false,
+    "scorer_rows_mutated": false
+  },
+  "known_limitations": [
+    "The first wide-grid run exceeded the interactive timeout; the accepted M100 evidence uses a narrower operational grid.",
+    "Option candidates remain theoretical and are not yet constrained by real bid/ask, open interest, implied-volatility surface, assignment, or margin.",
+    "Stock max loss still uses a stop-loss proxy rather than simulated stop execution.",
+    "Future versions should combine this walk-forward selector with M98 live option liquidity filters during market hours."
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "policy_version": "paper-cycle-watch-tick-policy-v1",
+  "milestone": "M131",
+  "description": "File-backed one-tick watch runner for the restartable paper cycle scheduler.",
+  "paper_only": true,
+  "live_order_routing_enabled": false,
+  "ibkr_order_submitted": false,
+  "transmit_enabled": false,
+  "watch_contract": {
+    "command": "replay-score-paper-cycle-watch-tick",
+    "max_scheduler_ticks_per_invocation": 1,
+    "checkpoint_write": "atomic_replace",
+    "input_signature_excludes": [
+      "checkpoint_json"
+    ],
+    "skip_rule": "When --skip-unchanged-inputs is set, an existing checkpoint is present, and the watched input-file signature matches the previous watch-state signature, the scheduler tick is skipped unless --force-run is set."
+  },
+  "validation": {
+    "seed_watch_run_id": "m131_20260630_watch_tick_seed",
+    "skip_watch_run_id": "m131_20260630_watch_tick_skip_unchanged",
+    "force_resume_watch_run_id": "m131_20260630_watch_tick_force_resume",
+    "seed_action": "executed_scheduler_tick",
+    "seed_new_paper_fills": 10,
+    "skip_action": "skipped_unchanged_inputs",
+    "force_resume_action": "executed_scheduler_tick",
+    "force_resume_new_paper_fills": 0,
+    "force_resume_cumulative_paper_fills": 10,
+    "force_resume_runs_completed_total": 2,
+    "force_resume_next_scheduler_tick_index": 3,
+    "force_resume_final_risk_state": "within_limits",
+    "outputs": {
+      "checkpoint": "exports/m131_watch_checkpoint.json",
+      "watch_state": "exports/m131_watch_state.json",
+      "seed_report": "exports/m131_watch_tick_seed.md",
+      "skip_report": "exports/m131_watch_tick_skip_unchanged.md",
+      "force_resume_report": "exports/m131_watch_tick_force_resume.md"
+    }
+  }
+}

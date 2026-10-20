@@ -1,0 +1,30 @@
+{
+  "profile_version": "paper-cycle-watch-daemon-profile-v1",
+  "milestone": "M142",
+  "description": "M142 repeated finite daemon profile for live IBKR mark-refresh quality monitoring.",
+  "watch_profile_json": "paper_cycle_watch_ibkr_mark_refresh_quality_monitor_profile_v1.json",
+  "daemon": {
+    "max_batches": 5,
+    "ticks_per_batch": 1,
+    "batch_interval_seconds": 60.0,
+    "sleep_between_batches": true,
+    "runner_interval_seconds": 0.0,
+    "sleep_between_ticks": false,
+    "force_each_tick": false
+  },
+  "outputs": {
+    "output_dir": "../exports/m142_ibkr_quality_monitor_watch_daemon",
+    "daily_log_jsonl": "../exports/m142_ibkr_quality_monitor_watch_daemon_daily_log.jsonl",
+    "output": "../exports/m142_ibkr_quality_monitor_watch_daemon.md",
+    "json_output_path": "../exports/m142_ibkr_quality_monitor_watch_daemon.json"
+  },
+  "safety": {
+    "paper_only": true,
+    "repeated_real_ibkr_read_only_market_data": true,
+    "quality_actions_affect_paper_sizing_only": true,
+    "fallback_reuses_existing_paper_snapshots_only": true,
+    "live_order_routing_enabled": false,
+    "ibkr_order_submitted": false,
+    "transmit_enabled": false
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "policy_version": "paper-portfolio-state-policy-v1",
+  "milestone": "M122",
+  "mode": "paper_only_portfolio_state_reconciler",
+  "input": {
+    "entry_source": "M118 or M115 paper entry router JSON",
+    "exit_source": "optional M121 paper exit router JSON",
+    "mark_source": "optional M119 paper position mark time-series JSON"
+  },
+  "reconciliation_rules": {
+    "entry_positions": "Use paper_positions long/short quantities and average prices as the starting paper position state.",
+    "exit_fills": "Subtract M121 realized_pnl_ledger closed_quantity by action: SELL reduces long quantity; BUY_TO_COVER reduces short quantity.",
+    "realized_pnl": "Sum M121 realized_pnl rows by symbol.",
+    "unrealized_pnl": "When latest marks are supplied, calculate remaining open long/short PnL from latest mark and entry average price.",
+    "status": "open when any open long or short quantity remains; closed when entry quantity existed but no open quantity remains."
+  },
+  "latest_validation": {
+    "state_run_id": "m122_20260630_m118_m121_portfolio_state",
+    "source_entry_router_run_id": "m118_20260630_ibkr_mark_fills",
+    "source_exit_router_run_id": "m121_20260630_m120_exit_router",
+    "source_timeseries_run_id": "m119_20260630_m118_mark_refresh_series",
+    "symbol_count": 5,
+    "open_symbol_count": 5,
+    "closed_symbol_count": 0,
+    "realized_pnl": 0.0,
+    "unrealized_pnl": 0.03,
+    "total_pnl": 0.03,
+    "output": "exports/m122_paper_portfolio_state.json"
+  },
+  "safety": {
+    "paper_only": true,
+    "ibkr_order_submitted": false,
+    "transmit_enabled": false,
+    "live_order_routing_enabled": false,
+    "portfolio_mutation_enabled": false,
+    "description": "M122 reconciles simulated entries, simulated exits, and latest paper marks into a paper portfolio state only. It does not call broker order APIs, submit orders, transmit orders, or mutate a real portfolio."
+  }
+}

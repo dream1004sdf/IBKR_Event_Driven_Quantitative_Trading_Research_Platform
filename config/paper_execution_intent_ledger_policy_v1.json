@@ -1,0 +1,48 @@
+{
+  "policy_version": "paper-execution-intent-ledger-v1",
+  "created_at": "2026-06-30",
+  "milestone": "M114",
+  "purpose": "Persist auto-ready execution candidates as deduplicated paper execution intents before any paper router or live router can act on them.",
+  "scope": {
+    "auto_gate_input": "exports/m113_m112_auto_execution_gate.json",
+    "execution_intent_ledger": "exports/m114_m113_execution_intent_ledger.json",
+    "execution_intent_ledger_markdown": "exports/m114_m113_execution_intent_ledger.md",
+    "duplicate_check_report": "exports/m114_m113_execution_intent_ledger_duplicate_check.json"
+  },
+  "ledger_result": {
+    "ledger_run_id": "m114_20260630_initial",
+    "source_auto_ready_count": 10,
+    "intent_count": 10,
+    "intent_state_counts": {
+      "pending_paper_execution": 10
+    },
+    "action_counts": {
+      "BUY": 5,
+      "SELL_SHORT": 5
+    },
+    "symbol_counts": {
+      "ORCL": 1,
+      "NFLX": 3,
+      "GOOGL": 2,
+      "TSLA": 2,
+      "INTC": 2
+    }
+  },
+  "duplicate_detection": {
+    "method": "sha256 hash over source score/outcome, symbol, ticket type, action, quantity, order type, and account",
+    "duplicate_check_existing_intents": 10,
+    "duplicate_check_duplicate_count": 10,
+    "duplicate_check_new_count": 0
+  },
+  "interpretation": {
+    "status": "Auto-ready paper intents are now traceable and deduplicated.",
+    "finding": "The same auto gate input no longer creates new executable work after the first ledger run; every repeated candidate resolves to duplicate_existing_intent.",
+    "recommendation": "Next milestone should add a paper order router that consumes only pending_paper_execution intents, simulates fills, records paper positions, and moves ledger state forward."
+  },
+  "safety": {
+    "paper_intent_only": true,
+    "ibkr_order_submitted": false,
+    "transmit_enabled": false,
+    "live_order_routing_enabled": false
+  }
+}

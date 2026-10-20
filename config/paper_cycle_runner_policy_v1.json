@@ -1,0 +1,51 @@
+{
+  "policy_version": "paper-cycle-runner-policy-v1",
+  "milestone": "M127",
+  "mode": "paper_only_single_cycle_runner",
+  "input": {
+    "auto_gate": "M113 autonomous execution gate JSON",
+    "portfolio_risk_state": "Current M123/M126/M127-compatible paper portfolio risk-state JSON",
+    "fill_marks": "M117-compatible mark snapshot JSON for entry fill reference prices",
+    "loop_marks": "One or more M117-compatible mark snapshot JSON files for post-fill mark-to-market",
+    "optional_exit_router": "M121 paper exit-router JSON"
+  },
+  "cycle_steps": [
+    "Run M124 risk-gated execution-intent ledger from auto-ready items and current risk state.",
+    "Run M125 required portfolio-risk-gated paper router from pending intents.",
+    "Run M126 paper portfolio risk loop from simulated fills, marks, optional exits, and limits.",
+    "Emit a next-cycle M123-compatible paper portfolio risk-state JSON."
+  ],
+  "latest_validation": {
+    "cycle_run_id": "m127_20260630_single_paper_cycle",
+    "initial_risk_state": "within_limits",
+    "entry_gate_action": "allow_new_entries",
+    "pending_entry_intents": 10,
+    "blocked_entry_intents": 0,
+    "paper_fills": 10,
+    "post_cycle_risk_state": "within_limits",
+    "post_cycle_gate_action": "allow_new_entries",
+    "post_cycle_gross_exposure": 33.92,
+    "post_cycle_short_exposure": 24.64,
+    "post_cycle_total_pnl": 0.03,
+    "next_cycle_handoff_check": {
+      "ledger_run_id": "m127_20260630_next_cycle_handoff_check",
+      "pending_paper_execution_count": 10,
+      "blocked_by_portfolio_risk_state_count": 0
+    },
+    "outputs": {
+      "combined_cycle": "exports/m127_single_paper_cycle.json",
+      "entry_ledger": "exports/m127_entry_ledger.json",
+      "entry_router": "exports/m127_entry_router.json",
+      "risk_loop": "exports/m127_risk_loop.json",
+      "next_portfolio_risk_state": "exports/m127_next_portfolio_risk_state.json"
+    }
+  },
+  "safety": {
+    "paper_only": true,
+    "ibkr_order_submitted": false,
+    "transmit_enabled": false,
+    "live_order_routing_enabled": false,
+    "portfolio_mutation_enabled": false,
+    "description": "M127 runs one paper-only cycle from risk-gated intents to simulated fills and next-cycle risk state. It does not call broker order APIs, submit orders, transmit orders, or mutate a real portfolio."
+  }
+}

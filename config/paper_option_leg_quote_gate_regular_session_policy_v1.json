@@ -1,0 +1,110 @@
+{
+  "policy_version": "paper-option-leg-quote-gate-regular-session-v1",
+  "created_at": "2026-06-29",
+  "milestone": "M104",
+  "purpose": "Require selected paper option strategies to have actual live IBKR option-leg quote matches before remaining option allocations.",
+  "scope": {
+    "allocation_inputs": [
+      "exports/m100_v14_nuanced_v1_stock_option_walk_forward_tuning.json",
+      "exports/m102_v14_nuanced_v1_stock_option_wide_grid_tuning.json"
+    ],
+    "quote_snapshot": "exports/m104_ibkr_regular_session_option_leg_quote_snapshot.json",
+    "reports": [
+      "exports/m104_m100_option_leg_quote_gate.md",
+      "exports/m104_m100_option_leg_quote_gate.json",
+      "exports/m104_m102_option_leg_quote_gate.md",
+      "exports/m104_m102_option_leg_quote_gate.json"
+    ]
+  },
+  "ibkr_quote_snapshot": {
+    "requested_symbols": [
+      "AVGO",
+      "NOW",
+      "AMD",
+      "SNOW",
+      "CRM",
+      "ORCL",
+      "MU",
+      "CSCO",
+      "TSLA",
+      "LRCX",
+      "INTU",
+      "NFLX",
+      "INTC",
+      "TXN",
+      "GOOGL",
+      "META",
+      "AAPL"
+    ],
+    "strikes_around_reference": 1,
+    "max_expirations": 1,
+    "requested_quote_contracts": 102,
+    "bid_ask_contracts": 102,
+    "bid_ask_rate": 1.0,
+    "avg_spread_pct": 0.16451237184693926,
+    "status_counts": {
+      "quoted": 90,
+      "wide_spread": 12
+    },
+    "market_data_type_requested": 1,
+    "generic_ticks": "100,101,104,106"
+  },
+  "gate_rules": {
+    "max_leg_spread_pct": 0.3,
+    "fallback_to_stock": true,
+    "bull_call_debit_spread": "requires an eligible call long leg and an eligible higher-strike call short leg in the same expiration",
+    "bear_put_debit_spread": "requires an eligible put long leg and an eligible lower-strike put short leg in the same expiration",
+    "long_call_or_long_put": "requires one eligible quoted long option leg",
+    "eligible_leg": "quote_status quoted, positive bid/ask, ask not below bid, and spread_pct <= max_leg_spread_pct"
+  },
+  "results": {
+    "m100": {
+      "source_selected_allocations": 301,
+      "option_allocations_seen": 70,
+      "option_allocations_passed": 49,
+      "option_allocations_downgraded_to_stock": 21,
+      "option_allocations_blocked": 0,
+      "matched_strategy_counts": {
+        "bull_call_debit_spread": 45,
+        "bear_put_debit_spread": 4
+      },
+      "failed_reason_counts": {
+        "missing_higher_short_leg_same_expiration": 19,
+        "no_eligible_long_leg_quote": 2
+      },
+      "gated_selected_allocations": 301,
+      "gated_positive_realized_rate": 0.5980066445182725,
+      "gated_total_realized_pnl": 9060.646252728186
+    },
+    "m102": {
+      "source_selected_allocations": 279,
+      "option_allocations_seen": 70,
+      "option_allocations_passed": 49,
+      "option_allocations_downgraded_to_stock": 21,
+      "option_allocations_blocked": 0,
+      "matched_strategy_counts": {
+        "bull_call_debit_spread": 45,
+        "bear_put_debit_spread": 4
+      },
+      "failed_reason_counts": {
+        "missing_higher_short_leg_same_expiration": 19,
+        "no_eligible_long_leg_quote": 2
+      },
+      "gated_selected_allocations": 279,
+      "gated_positive_realized_rate": 0.6093189964157706,
+      "gated_total_realized_pnl": 8635.835848340219
+    }
+  },
+  "interpretation": {
+    "replacement_status": "M104 is stricter than the M103 symbol-level option liquidity gate and should be used as the preferred paper option tradability gate before any future order-routing layer.",
+    "normalized_replay_caveat": "Historical replay option candidates use normalized theoretical strikes around an underlying_reference_price of 100. The M104 gate therefore matches live strategy structure around the current IBKR ATM quote snapshot rather than treating normalized replay strikes as literal live strikes."
+  },
+  "safety": {
+    "paper_only": true,
+    "read_only_quote_snapshot": true,
+    "ibkr_order_submitted": false,
+    "account_or_portfolio_checked": false,
+    "margin_checked": false,
+    "positions_checked": false
+  }
+}

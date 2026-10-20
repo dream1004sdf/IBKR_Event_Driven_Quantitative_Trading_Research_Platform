@@ -1,0 +1,70 @@
+{
+  "policy_version": "ibkr-autonomous-execution-gate-v1",
+  "created_at": "2026-06-30",
+  "milestone": "M113",
+  "purpose": "Move from human review labels toward deterministic autonomous-trading gates by converting fractional-share, short-stock, short-availability, cash-buffer, and capacity checks into machine-enforced rules.",
+  "scope": {
+    "order_preview_input": "exports/m112_m111_order_preview.json",
+    "short_availability_input": "exports/m113_ibkr_short_availability.json",
+    "auto_execution_gate_report": "exports/m113_m112_auto_execution_gate.json",
+    "auto_execution_gate_markdown": "exports/m113_m112_auto_execution_gate.md"
+  },
+  "ibkr_short_availability": {
+    "source": "IBKR TWS API reqMktData generic tick 236",
+    "symbols_checked": [
+      "AMD",
+      "AMZN",
+      "INTC",
+      "ORCL",
+      "QCOM",
+      "SNOW",
+      "TSLA"
+    ],
+    "symbols_short_available": 7,
+    "all_checked_symbols_short_available": true,
+    "score_observed": 3.0,
+    "exact_shortable_shares_observed": true
+  },
+  "gate_parameters": {
+    "allow_fractional_shares": true,
+    "allow_short_stock": true,
+    "require_short_availability_for_shorts": true,
+    "require_broker_whatif": false,
+    "max_auto_orders": 10,
+    "min_cash_buffer": 50.0,
+    "allowed_ticket_types": [
+      "stock"
+    ],
+    "allowed_actions": [
+      "BUY",
+      "SELL"
+    ]
+  },
+  "auto_execution_gate_result": {
+    "source_preview_item_count": 25,
+    "auto_ready_count": 10,
+    "auto_gate_status_counts": {
+      "auto_execution_ready": 10,
+      "auto_execution_capacity_blocked": 15
+    },
+    "block_reason_counts": {
+      "max_auto_orders_not_exceeded": 15
+    },
+    "used_budget": {
+      "cumulative_cash_impact": -5.0,
+      "cumulative_initial_margin": 20.0
+    }
+  },
+  "interpretation": {
+    "status": "Short-stock review is now machine-gated instead of manually blocked when IBKR short availability data is present.",
+    "finding": "Fractional shares and short stock can pass the autonomous gate when explicitly allowed and backed by IBKR short availability. The remaining block is only the configured max_auto_orders capacity cap.",
+    "recommendation": "Next milestone should build a paper execution intent ledger and kill-switch controlled order router. Live transmit should remain disabled until broker what-if/margin, duplicate-order, open-order, and position-conflict gates are all mandatory."
+  },
+  "safety": {
+    "auto_gate_only": true,
+    "read_only_short_availability": true,
+    "ibkr_order_submitted": false,
+    "transmit_enabled": false,
+    "live_order_routing_enabled": false
+  }
+}

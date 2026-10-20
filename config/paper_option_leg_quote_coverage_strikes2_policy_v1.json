@@ -1,0 +1,138 @@
+{
+  "policy_version": "paper-option-leg-quote-coverage-strikes2-v1",
+  "created_at": "2026-06-29",
+  "milestone": "M106",
+  "purpose": "Expand IBKR option quote coverage from strikes-around=1 to strikes-around=2 and evaluate whether missing live option legs were caused by insufficient quote coverage.",
+  "scope": {
+    "quote_snapshot": "exports/m106_ibkr_regular_session_option_leg_quote_snapshot_strikes2.json",
+    "m100_gate_report": "exports/m106_m100_option_leg_quote_gate_strikes2.json",
+    "m102_gate_report": "exports/m106_m102_option_leg_quote_gate_strikes2.json",
+    "m106_leg_aware_report": "exports/m106_v14_nuanced_v1_leg_aware_walk_forward_tuning_strikes2.json",
+    "m106_checkpoint": "work/m106_leg_aware_walk_forward_strikes2_checkpoint.json"
+  },
+  "quote_snapshot": {
+    "symbols": [
+      "AVGO",
+      "NOW",
+      "AMD",
+      "SNOW",
+      "CRM",
+      "ORCL",
+      "MU",
+      "CSCO",
+      "TSLA",
+      "LRCX",
+      "INTU",
+      "NFLX",
+      "INTC",
+      "TXN",
+      "GOOGL",
+      "META",
+      "AAPL"
+    ],
+    "strikes_around": 2,
+    "max_expirations": 1,
+    "requested_quote_contracts": 170,
+    "bid_ask_contracts": 170,
+    "bid_ask_rate": 1.0,
+    "avg_spread_pct": 0.12361013321234186,
+    "status_counts": {
+      "quoted": 165,
+      "wide_spread": 5
+    },
+    "market_data_type_requested": 1,
+    "generic_ticks": "100,101,104,106",
+    "warnings": [
+      "IBKR market data farm/HMDS connectivity informational warnings were reported, but quotes were collected for all requested contracts."
+    ]
+  },
+  "m104_gate_recheck": {
+    "m100": {
+      "source_selected_allocations": 301,
+      "option_allocations_seen": 70,
+      "option_allocations_passed": 70,
+      "option_allocations_downgraded_to_stock": 0,
+      "option_allocations_blocked": 0,
+      "matched_strategy_counts": {
+        "bull_call_debit_spread": 66,
+        "bear_put_debit_spread": 4
+      },
+      "failed_reason_counts": {},
+      "gated_positive_realized_rate": 0.5946843853820598,
+      "gated_total_realized_pnl": 9882.52430003819
+    },
+    "m102": {
+      "source_selected_allocations": 279,
+      "option_allocations_seen": 70,
+      "option_allocations_passed": 70,
+      "option_allocations_downgraded_to_stock": 0,
+      "option_allocations_blocked": 0,
+      "matched_strategy_counts": {
+        "bull_call_debit_spread": 66,
+        "bear_put_debit_spread": 4
+      },
+      "failed_reason_counts": {},
+      "gated_positive_realized_rate": 0.6057347670250897,
+      "gated_total_realized_pnl": 9457.713895650226
+    }
+  },
+  "leg_aware_walk_forward": {
+    "rows": 719,
+    "fold_count": 6,
+    "grid_combinations_per_fold": 432,
+    "selected_allocations": 301,
+    "selection_rate": 0.6283924843423799,
+    "positive_realized": 182,
+    "evaluated_allocations": 301,
+    "positive_realized_rate": 0.6046511627906976,
+    "total_realized_pnl": 8620.726644511344,
+    "avg_realized_pnl": 28.640287855519414,
+    "avg_allocation_regret": 21.388849156187156,
+    "selected_instrument_counts": {
+      "blocked": 178,
+      "stock": 246,
+      "option": 55
+    },
+    "selected_strategy_counts": {
+      "blocked": 178,
+      "stock_short": 124,
+      "stock_long": 122,
+      "bull_call_debit_spread": 51,
+      "bear_put_debit_spread": 4
+    },
+    "option_gate_counts": {
+      "option_allocations_seen": 55,
+      "option_allocations_passed": 55,
+      "option_allocations_downgraded_to_stock": 0,
+      "option_allocations_blocked": 0
+    },
+    "matched_strategy_counts": {
+      "bull_call_debit_spread": 51,
+      "bear_put_debit_spread": 4
+    },
+    "failed_reason_counts": {}
+  },
+  "comparison": {
+    "m104_strikes1_m102_option_passed": 49,
+    "m106_strikes2_m102_option_passed": 70,
+    "m105_strikes1_leg_aware_option_passed": 40,
+    "m106_strikes2_leg_aware_option_passed": 55,
+    "m105_strikes1_downgraded_to_stock": 15,
+    "m106_strikes2_downgraded_to_stock": 0,
+    "m105_total_realized_pnl": 8565.28928708328,
+    "m106_total_realized_pnl": 8620.726644511344,
+    "interpretation": "The prior missing short-leg failures were primarily quote coverage limitations. Expanding to strikes-around=2 eliminated live-leg failures for the tested M100/M102 option allocations and for the M105-style leg-aware tuning run."
+  },
+  "recommendation": {
+    "default_quote_coverage_for_option_strategy_research": "Use strikes-around=2 as the minimum regular-session research snapshot for debit spread strategy evaluation.",
+    "next_step": "Run a wider M106/M107 leg-aware parameter grid with strikes-around=2 before treating the leg-aware allocator as a performance replacement for M102/M104."
+  },
+  "safety": {
+    "paper_only": true,
+    "read_only_quote_snapshot": true,
+    "ibkr_order_submitted": false,
+    "account_or_portfolio_checked": false,
+    "margin_checked": false,
+    "positions_checked": false
+  }
+}

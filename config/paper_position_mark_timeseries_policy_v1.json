@@ -1,0 +1,49 @@
+{
+  "policy_version": "paper-position-mark-timeseries-policy-v1",
+  "milestone": "M119",
+  "mode": "paper_only_mark_to_market_timeseries_ledger",
+  "input": {
+    "router_source": "M118 or M115 paper order-router JSON",
+    "mark_sources": "One or more M117 IBKR stock mark snapshot JSON files in time order",
+    "required_cli": "replay-score-paper-position-mark-timeseries --router-json ... --marks-jsons first.json,next.json"
+  },
+  "ledger_rows": {
+    "grain": "one row per paper position per mark snapshot",
+    "fields": [
+      "sequence",
+      "mark_generated_at",
+      "symbol",
+      "net_quantity",
+      "mark_price",
+      "paper_unrealized_pnl",
+      "paper_unrealized_pnl_pct",
+      "exit_signal",
+      "suggested_close_action"
+    ]
+  },
+  "thresholds": {
+    "default_take_profit_pct": 0.03,
+    "default_stop_loss_pct": 0.02,
+    "default_max_loss_dollars": null
+  },
+  "latest_validation": {
+    "series_run_id": "m119_20260630_m118_mark_refresh_series",
+    "snapshot_count": 2,
+    "ledger_row_count": 10,
+    "missing_mark_steps": 0,
+    "first_unrealized_pnl": 0.0,
+    "final_unrealized_pnl": 0.03,
+    "aggregate_exit_signal_counts": {
+      "hold": 10
+    },
+    "output": "exports/m119_m118_paper_position_mark_timeseries.json"
+  },
+  "safety": {
+    "paper_only": true,
+    "ibkr_order_submitted": false,
+    "transmit_enabled": false,
+    "live_order_routing_enabled": false,
+    "portfolio_mutation_enabled": false,
+    "description": "M119 builds a paper mark-to-market time-series ledger from normalized marks. It does not call broker order APIs, submit orders, transmit orders, or mutate a real portfolio."
+  }
+}

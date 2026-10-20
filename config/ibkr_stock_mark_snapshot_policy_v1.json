@@ -1,0 +1,45 @@
+{
+  "policy_version": "ibkr-stock-mark-snapshot-policy-v1",
+  "milestone": "M117",
+  "mode": "read_only_ibkr_stock_mark_snapshot_for_paper_positions",
+  "input": {
+    "symbols": "explicit --symbols or derived from M115 paper router JSON paper_positions",
+    "ibkr_api_call": "reqMktData stock snapshot-style subscription followed by cancelMktData",
+    "accepted_market_data_types": {
+      "1": "live",
+      "2": "frozen",
+      "3": "delayed",
+      "4": "delayed_frozen"
+    }
+  },
+  "mark_selection_order": [
+    "last",
+    "bid_ask_midpoint",
+    "close"
+  ],
+  "downstream": {
+    "compatible_with": "M116 replay-score-paper-position-mark --marks-json",
+    "normalized_field": "marks[] with symbol, mark_price, mark_source, mark_timestamp"
+  },
+  "safety": {
+    "read_only_market_data": true,
+    "ibkr_order_submitted": false,
+    "transmit_enabled": false,
+    "live_order_routing_enabled": false,
+    "portfolio_mutation_enabled": false,
+    "description": "M117 requests stock market-data marks only, cancels subscriptions, and writes normalized marks for paper mark-to-market. It must not call broker order APIs, transmit orders, or mutate a real portfolio."
+  },
+  "latest_validation": {
+    "snapshot_path": "exports/m117_ibkr_stock_mark_snapshot.json",
+    "mark_to_market_path": "exports/m117_m116_ibkr_marked_paper_positions.json",
+    "symbols_requested": 5,
+    "marked_count": 5,
+    "missing_mark_count": 0,
+    "observed_market_data_type": "live",
+    "paper_exit_signal_counts": {
+      "stop_loss": 4,
+      "take_profit": 1
+    },
+    "note": "M115 fills are synthetic at a 100 reference price, so M117 paper PnL validates the mark feed and downstream plumbing but is not yet a realistic strategy PnL."
+  }
+}

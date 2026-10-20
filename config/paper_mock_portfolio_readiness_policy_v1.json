@@ -1,0 +1,86 @@
+{
+  "policy_version": "paper-mock-portfolio-readiness-v1",
+  "created_at": "2026-06-30",
+  "milestone": "M109",
+  "purpose": "Apply mock account, cash, exposure, and batch-size budgets to M108 paper execution-readiness ticket drafts without touching real IBKR account, margin, portfolio, positions, or orders.",
+  "scope": {
+    "readiness_input": "exports/m108_m107_execution_readiness.json",
+    "mock_portfolio_report": "exports/m109_m108_mock_portfolio_readiness.json",
+    "mock_portfolio_markdown": "exports/m109_m108_mock_portfolio_readiness.md"
+  },
+  "mock_account": {
+    "equity": 100000.0,
+    "cash": 100000.0
+  },
+  "mock_limits": {
+    "single_trade_risk": 500.0,
+    "total_open_risk": 5000.0,
+    "gross_notional": 100000.0,
+    "option_risk": 2000.0,
+    "short_notional": 20000.0,
+    "symbol_risk": 1000.0,
+    "cash": 100000.0,
+    "approved_tickets": 25
+  },
+  "source_readiness": {
+    "selected_allocations": 279,
+    "ticket_drafts": 279,
+    "actionable_ticket_drafts": 247,
+    "not_ready": 32,
+    "not_candidate": 200
+  },
+  "mock_portfolio_result": {
+    "approved_ticket_count": 25,
+    "portfolio_status_counts": {
+      "not_candidate": 200,
+      "portfolio_needs_human_review": 12,
+      "portfolio_ready": 13,
+      "portfolio_not_ready": 222,
+      "not_ready": 32
+    },
+    "portfolio_check_failure_counts": {
+      "prior_execution_readiness_actionable": 232,
+      "approved_ticket_count_within_mock_policy": 222
+    },
+    "portfolio_review_reason_counts": {
+      "short_stock_requires_borrow_margin_and_account_review": 9,
+      "short_option_leg_assignment_and_exercise_risk_requires_human_review": 3,
+      "zero_open_interest_seen_in_snapshot_confirm_liquidity_before_execution": 1
+    }
+  },
+  "used_mock_budget": {
+    "total_open_risk": 646.0,
+    "gross_notional": 22206.0,
+    "option_risk": 206.0,
+    "short_notional": 9000.0,
+    "cash": 13206.0,
+    "approved_tickets": 25,
+    "symbol_risk": {
+      "ORCL": 20.0,
+      "NFLX": 116.0,
+      "GOOGL": 40.0,
+      "TSLA": 190.0,
+      "INTC": 40.0,
+      "QCOM": 20.0,
+      "META": 20.0,
+      "AMZN": 40.0,
+      "AMD": 40.0,
+      "CSCO": 60.0,
+      "INTU": 60.0
+    }
+  },
+  "interpretation": {
+    "status": "First mock portfolio budget gate for paper ticket drafts.",
+    "finding": "Under the conservative default batch cap, 25 of 247 actionable paper ticket drafts are approved by mock portfolio budgets. The binding constraint is max approved tickets, not total risk or gross notional.",
+    "recommendation": "Keep this as the staging gate before IBKR read-only account integration. In M110, replace mock equity/cash with read-only IBKR account values while preserving no-order behavior."
+  },
+  "safety": {
+    "paper_only": true,
+    "mock_account_only": true,
+    "ibkr_order_submitted": false,
+    "account_or_portfolio_checked": false,
+    "margin_checked": false,
+    "positions_checked": false,
+    "open_orders_checked": false
+  }
+}

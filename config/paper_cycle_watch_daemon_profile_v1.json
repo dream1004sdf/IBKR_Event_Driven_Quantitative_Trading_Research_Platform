@@ -1,0 +1,27 @@
+{
+  "profile_version": "paper-cycle-watch-daemon-profile-v1",
+  "milestone": "M136",
+  "description": "M136 finite daemon wrapper profile for calendar-gated paper watch operation.",
+  "watch_profile_json": "paper_cycle_watch_daemon_watch_profile_v1.json",
+  "daemon": {
+    "max_batches": 3,
+    "ticks_per_batch": 1,
+    "batch_interval_seconds": 0.0,
+    "sleep_between_batches": false,
+    "runner_interval_seconds": 0.0,
+    "sleep_between_ticks": false,
+    "force_each_tick": false
+  },
+  "outputs": {
+    "output_dir": "../exports/m136_calendar_watch_daemon",
+    "daily_log_jsonl": "../exports/m136_calendar_watch_daemon_daily_log.jsonl",
+    "output": "../exports/m136_calendar_watch_daemon.md",
+    "json_output_path": "../exports/m136_calendar_watch_daemon.json"
+  },
+  "safety": {
+    "paper_only": true,
+    "live_order_routing_enabled": false,
+    "ibkr_order_submitted": false,
+    "transmit_enabled": false
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "policy_version": "trading-dashboard-snapshot-policy-v1",
+  "milestone": "M143",
+  "description": "Read-only command-center backend snapshot policy for the future real-time trading dashboard.",
+  "dashboard_profile_json": "config/trading_dashboard_snapshot_profile_v1.json",
+  "required_sections": [
+    "status",
+    "ai_opinion",
+    "menus",
+    "account",
+    "positions",
+    "risk",
+    "buy_sell_plan",
+    "news_ticker",
+    "standing_regimes",
+    "market_data",
+    "macro_economic",
+    "sources",
+    "safety"
+  ],
+  "status_rules": [
+    "red when portfolio risk or mark quality blocks new entries",
+    "red when mark quality has delayed or missing rows",
+    "yellow when risk is monitor, mark quality warns, fallback is used, size reduction is active, or buying power/available funds are below the first dashboard threshold",
+    "green when all primary dashboard checks pass"
+  ],
+  "menus": [
+    "overview",
+    "account",
+    "positions",
+    "plans",
+    "risk",
+    "news",
+    "regimes",
+    "market_data",
+    "macro",
+    "logs",
+    "settings"
+  ],
+  "safety": {
+    "read_only_snapshot_builder": true,
+    "ibkr_order_submitted": false,
+    "transmit_enabled": false,
+    "live_order_routing_enabled": false
+  }
+}

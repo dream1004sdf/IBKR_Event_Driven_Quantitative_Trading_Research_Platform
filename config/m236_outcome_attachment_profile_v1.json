@@ -1,0 +1,43 @@
+{
+  "version": "m236-outcome-attachment-profile-v1",
+  "milestone": "M236",
+  "description": "Attach due 5M/15M/30M intraday market outcomes to M236 source-quality learning records using bounded read-only price fetches.",
+  "paths": {
+    "outcome_learning_jsonl": "../exports/m236_cross_provider_outcome_learning.jsonl"
+  },
+  "attachment": {
+    "price_source": "ibkr",
+    "max_records": 10,
+    "max_symbols": 4,
+    "horizons": "5M,15M,30M,EOD",
+    "flat_return_threshold": 0.001,
+    "lookback_records": 5000,
+    "adaptive_batch_enabled": true,
+    "adaptive_backlog_mid": 500,
+    "adaptive_backlog_high": 2000,
+    "adaptive_max_records_mid": 50,
+    "adaptive_max_records_high": 100,
+    "adaptive_max_symbols_mid": 12,
+    "adaptive_max_symbols_high": 20,
+    "dry_run": false
+  },
+  "ibkr": {
+    "host": "127.0.0.1",
+    "port": 4001,
+    "client_id": 1036,
+    "timeout_seconds": 12.0,
+    "what_to_show": "TRADES",
+    "bar_size": "1 min",
+    "use_rth": false
+  },
+  "outputs": {
+    "output": "../exports/m236_outcome_attachment_report.md",
+    "json_output_path": "../exports/m236_outcome_attachment_report.json"
+  },
+  "safety": {
+    "read_only_price_fetch": true,
+    "orders_submitted": false,
+    "transmit_enabled": false,
+    "mutates_only_m236_outcome_jsonl": true
+  }
+}

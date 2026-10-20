@@ -1,0 +1,61 @@
+{
+  "policy_name": "paper_portfolio_risk_policy_v1",
+  "policy_version": "0.14.0-m95-paper-portfolio-risk-layer",
+  "created_at": "2026-06-29",
+  "mode": "paper_only_virtual_portfolio",
+  "inherits_static_policy": "config/paper_order_risk_policy_v1.json",
+  "scorer": {
+    "scorer_name": "openai",
+    "model_name": "gpt-5.4-mini",
+    "scorer_version": "openai-replay-score-v14-nuanced-v1",
+    "price_source": "yahoo_chart_daily_adjclose"
+  },
+  "paper_order_parameters": {
+    "min_confidence": 0.35,
+    "normal_size": 1.25,
+    "haircut_size_multiplier": 0.75,
+    "base_quantity": 1.0
+  },
+  "static_risk_limits": {
+    "max_total_gross_quantity": 300.0,
+    "max_symbol_gross_quantity": 12.0,
+    "max_side_gross_quantity": 175.0,
+    "max_symbol_orders": 10,
+    "max_symbol_day_orders": 1,
+    "min_abs_expected_return": 0.0025
+  },
+  "virtual_portfolio_limits": {
+    "starting_equity": 100000.0,
+    "notional_per_quantity": 1000.0,
+    "max_daily_gross_exposure_pct": 0.08,
+    "max_symbol_daily_exposure_pct": 0.03,
+    "max_sector_daily_exposure_pct": 0.04,
+    "max_daily_loss_pct": 0.015,
+    "max_drawdown_pct": 0.04,
+    "max_consecutive_losses": 5,
+    "loss_throttle_multiplier": 0.5,
+    "min_reduced_quantity": 0.01
+  },
+  "safety": {
+    "paper_only": true,
+    "virtual_portfolio_only": true,
+    "ibkr_order_submitted": false,
+    "account_or_portfolio_checked": false,
+    "margin_checked": false,
+    "live_order_router_enabled": false,
+    "notes": "Frozen candidate virtual portfolio paper risk policy from M95. This is not live-trading authorization."
+  },
+  "evidence": {
+    "source_report": "exports/m95_v14_nuanced_v1_paper_portfolio_risk_layer.md",
+    "source_json": "exports/m95_v14_nuanced_v1_paper_portfolio_risk_layer.json",
+    "rows": 719,
+    "static_risk_candidates": 163,
+    "portfolio_candidates": 163,
+    "portfolio_accuracy": 0.6012269938650306,
+    "portfolio_avg_weighted_signed_excess_return": 0.023159066573398782,
+    "virtual_ending_equity": 103774.90249289332,
+    "virtual_net_return": 0.03774902492893319,
+    "max_drawdown": 0.00652186622482719,
+    "max_daily_loss": -0.003829257551917194
+  }
+}

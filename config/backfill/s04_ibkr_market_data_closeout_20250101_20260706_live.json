@@ -1,0 +1,67 @@
+{
+  "pilot_version": "ibkr-market-data-pilot-v1",
+  "paths": {
+    "source_database": "work/canonical_research_backfill/m254_canonical_20250101_20260706_v1/canonical_market_events.db",
+    "cache_database": "work/s04_market_data_closeout/ibkr_live_20250101_20260706/ibkr_historical_cache.db",
+    "audit_json": "artifacts/audit/s04_ibkr_market_data_collection_20250101_20260706.json",
+    "audit_markdown": "artifacts/audit/s04_ibkr_market_data_collection_20250101_20260706.md"
+  },
+  "window": {
+    "start_utc": "2025-01-01T00:00:00+00:00",
+    "end_utc": "2026-07-07T00:00:00+00:00"
+  },
+  "gateway": {
+    "host": "127.0.0.1",
+    "port": 4001,
+    "daily_client_id": 1392,
+    "intraday_client_id": 1393,
+    "account_mode": "live_read_only_historical"
+  },
+  "daily": {
+    "buffer_days_before": 7,
+    "buffer_days_after": 10,
+    "what_to_show": "TRADES",
+    "use_rth": true
+  },
+  "intraday": {
+    "bar_size": "1 min",
+    "minutes_before": 60,
+    "hours_after": 36,
+    "what_to_show": "TRADES",
+    "use_rth": false
+  },
+  "universe": {
+    "base_symbols": ["SPY", "QQQ", "IWM", "TLT", "IEF", "SHY", "UUP", "GLD", "USO", "XLE"],
+    "source_symbols": {
+      "federal_reserve": ["DIA"],
+      "ecb": ["VGK", "FEZ", "EUFN", "FXE"],
+      "boj": ["EWJ", "DXJ", "FXY"]
+    }
+  },
+  "runtime": {
+    "timeout_seconds": 60,
+    "max_attempts": 3,
+    "repair_passes": 2,
+    "retry_delay_seconds": 10,
+    "request_pause_seconds": 1.0
+  },
+  "audit_thresholds": {
+    "max_rth_missing_rate": 0.0,
+    "max_duplicate_bar_groups": 0,
+    "max_invalid_ohlc_rows": 0,
+    "max_timestamp_issue_rows": 0,
+    "max_date_only_intraday_windows": 0,
+    "max_exact_event_missing_windows": 0,
+    "max_daily_1d_missing": 0,
+    "max_daily_5d_missing": 0,
+    "max_holiday_rth_bars": 0
+  },
+  "safety": {
+    "read_only_historical_data_only": true,
+    "broker_orders_allowed": false,
+    "what_if_allowed": false,
+    "transmit_allowed": false,
+    "live_routing_allowed": false,
+    "s05_or_m253_allowed": false
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "profile_version": "evidence-refresh-watchdog-profile-v1",
+  "milestone": "M154",
+  "description": "Finite read-only watchdog that rechecks Evidence Freshness Desk, executes M153 refresh queue when stale/lagging evidence appears, and records cooldown/backoff auto-recovery state.",
+  "paths": {
+    "freshness_profile_json": "../config/evidence_freshness_desk_profile_v1.json",
+    "refresh_queue_profile_json": "../config/evidence_refresh_queue_profile_v1.json",
+    "freshness_report_json": "../exports/m152_evidence_freshness_desk.json",
+    "refresh_queue_json": "../exports/m153_evidence_refresh_queue_execute.json",
+    "refresh_queue_markdown": "../exports/m153_evidence_refresh_queue_execute.md"
+  },
+  "watchdog": {
+    "max_ticks": 1,
+    "interval_seconds": 1.0,
+    "sleep_between_ticks": false,
+    "cooldown_seconds": 300.0,
+    "initial_backoff_seconds": 120.0,
+    "max_backoff_seconds": 1800.0,
+    "queue_timeout_seconds": 240.0,
+    "dry_run": false
+  },
+  "outputs": {
+    "state_json_path": "../exports/m154_evidence_refresh_watchdog_state.json",
+    "tick_log_jsonl_path": "../exports/m154_evidence_refresh_watchdog_ticks.jsonl",
+    "output": "../exports/m154_evidence_refresh_watchdog.md",
+    "json_output_path": "../exports/m154_evidence_refresh_watchdog.json"
+  },
+  "safety": {
+    "read_only_refresh_or_rebuild": true,
+    "scorer_rows_mutated": false,
+    "ibkr_order_submitted": false,
+    "transmit_enabled": false,
+    "secrets_written": false
+  }
+}

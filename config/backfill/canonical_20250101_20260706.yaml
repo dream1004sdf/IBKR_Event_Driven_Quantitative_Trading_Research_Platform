@@ -1,0 +1,194 @@
+{
+  "run": {
+    "run_id": "m254_canonical_20250101_20260706_v1",
+    "build_id": "m254_canonical_20250101_20260706_v1",
+    "mode": "canonical_research_build",
+    "timezone": "America/New_York",
+    "start_local": "2025-01-01T00:00:00",
+    "end_local": "2026-07-06T00:00:00",
+    "dry_run": false,
+    "resume": true,
+    "fail_fast": true,
+    "output_dir": "exports/research_backfill",
+    "database_path": "work/canonical_research_backfill/{run_id}/canonical_market_events.db",
+    "require_non_empty_sources": true
+  },
+  "versions": {
+    "lineage_version": "m251_v2",
+    "macro_lineage_version": "m251b_v1",
+    "clusterer_version": "m252_v1",
+    "mapper_version": "asset_mapper_v2",
+    "resolver_version": "resolver_v2",
+    "security_master_version": "security_master_20260706",
+    "classifier_version": "event_classifier_v1",
+    "gate_version": "event_gate_v1",
+    "reaction_plan_version": "reaction_plan_v1",
+    "outcome_builder_version": "reaction_label_v1",
+    "replay_feature_version": "replay_features_v1",
+    "replay_outcome_version": "replay_outcomes_v1",
+    "ranking_version": "ranking_v1"
+  },
+  "sources": {
+    "news": {
+      "ibkr": {
+        "enabled": true,
+        "providers_preferred": ["BZ", "DJ-N", "DJ-RT", "DJ-RTA", "DJ-RTE", "DJ-RTG", "DJNL"],
+        "include_historical_news": true,
+        "include_broadtape_live_archive": true,
+      "historical_max_headlines_per_request": 300,
+      "max_pages_per_symbol": 80,
+      "timeout_seconds": 0,
+      "request_pause_seconds": 1.0,
+      "skip_on_resume_when_raw_exists": true,
+      "skip_on_resume_min_raw_rows": 1000
+      },
+      "marketaux": {
+        "enabled": true,
+        "raw_first": true,
+        "poll_backfill_days_per_request": 3,
+        "mode": "broad",
+        "limit_per_window": 100,
+        "pause_seconds": 3.0,
+        "parallel": {
+          "enabled": true,
+          "max_workers": 2,
+          "skip_completed_on_resume": true,
+          "shard_timeout_seconds": 0
+        },
+        "params": {
+          "must_have_entities": true,
+          "entity_types": "equity,index,etf",
+          "countries": "us",
+          "language": "en",
+          "group_similar": true
+        }
+      },
+      "external_signal_conversion": {
+        "enabled": true,
+        "limit": 100000,
+        "include_non_geopolitical": true,
+        "parallel": {
+          "enabled": true,
+          "max_workers": 8,
+          "max_slice_days": 45,
+          "target_rows_per_shard": 750,
+          "skip_completed_on_resume": true
+        }
+      }
+    },
+    "macro": {
+      "enabled": true,
+      "sources": {
+        "fred": true,
+        "alfred": true,
+        "bls": true,
+        "bea": true,
+        "eia": true,
+        "fed": true,
+        "ism": true,
+        "adp": true,
+        "sp_global_pmi": false,
+        "redbook": false,
+        "boj": true,
+        "ecb": true
+      }
+    },
+    "market_data": {
+      "source_priority": ["ibkr", "local_cache", "yahoo_fallback"],
+      "bar_size": "1min",
+      "cache_required": true,
+      "allow_yahoo_for_research_only": true
+    }
+  },
+  "macro": {
+    "universe": "global_core",
+    "fred_universes": ["us_core", "global_core", "international_core"],
+    "build_scope": "global_macro_v1",
+    "central_bank_scope": ["Fed", "ECB", "BOJ"],
+    "taxonomy_registry_version": "s04p1-macro-semantic-registry-v1",
+    "reaction_trigger_default": false,
+    "market_data_policy": "ibkr_read_only_after_security_master_contract_resolution",
+    "required_central_bank_coverage": {
+      "Fed": ["decision", "minutes", "projection"],
+      "ECB": ["decision", "statement", "press_conference"],
+      "BOJ": ["decision", "statement", "minutes_or_summary"]
+    }
+  },
+  "universes": {
+    "news_subscription_universe": {
+      "static_t0": ["SPY", "QQQ", "NVDA", "AAPL", "MSFT", "AMZN", "META", "TSLA", "SMH", "SOXX"]
+    },
+    "outcome_core_universe": {
+      "core_index": ["SPY", "QQQ", "IWM", "DIA"],
+      "core_bigtech": ["NVDA", "AAPL", "MSFT", "AMZN", "META", "TSLA", "GOOGL"],
+      "core_macro": ["TLT", "IEF", "UUP", "GLD", "USO", "XLE"],
+      "core_sector": ["XLK", "XLF", "XLE", "XLV", "XLI", "SMH", "SOXX"]
+    },
+    "event_proxy_universe": {
+      "defense": ["ITA", "XAR"],
+      "cyber": ["CIBR", "HACK"],
+      "china_taiwan": ["FXI", "KWEB", "EWT", "EWY", "TSM", "SMH", "SOXX"],
+      "oil_energy": ["USO", "XLE", "XOP", "XOM", "CVX"],
+      "grains": ["DBA", "WEAT", "CORN"],
+      "rates": ["TLT", "IEF", "SHY", "UUP", "GLD"],
+      "japan_boj": ["EWJ", "DXJ", "FXY", "UUP", "TLT"],
+      "europe_ecb": ["VGK", "FEZ", "EUFN", "FXE", "UUP", "TLT"]
+    }
+  },
+  "reaction_labels": {
+    "windows": ["5m", "15m", "1h", "close", "1d", "5d"],
+    "decision_lags_seconds": [0, 30, 60, 180],
+    "session_buckets": ["premarket", "regular", "afterhours", "next_regular"],
+    "compute": {
+      "raw_return": true,
+      "market_adjusted_return": true,
+      "sector_adjusted_return": true,
+      "proxy_spread_return": true,
+      "residual_return": true,
+      "return_zscore": true,
+      "volume_zscore": true,
+      "mfe": true,
+      "mae": true,
+      "spread_estimate": true,
+      "slippage_estimate": true,
+      "paper_pnl_after_cost": true
+    }
+  },
+  "slicing": {
+    "news_slice_days": 7,
+    "marketaux_slice_days": 1,
+    "macro_slice_months": 1,
+    "price_slice_days": 5,
+    "cluster_boundary_overlap_hours": 24
+  },
+  "runtime": {
+    "timeouts_seconds": {
+      "marketaux_backfill": 0,
+      "ibkr_news_backfill": 0,
+      "benzinga_external_signals_build": 0,
+      "dow_jones_external_signals_build": 0,
+      "fred_universe_sync_us_core": 0,
+      "fred_universe_sync_global_core": 0,
+      "fred_universe_sync_international_core": 0,
+      "international_macro_sync": 0
+    }
+  },
+  "validation": {
+    "train": {"start": "2025-01-01", "end": "2025-09-30"},
+    "calibration": {"start": "2025-10-01", "end": "2026-02-28"},
+    "oos_walk_forward": {"start": "2026-03-01", "end": "2026-05-31"},
+    "final_blind_holdout": {"start": "2026-06-01", "end": "2026-07-06"},
+    "embargo_hours": 24,
+    "final_blind_locked": true
+  },
+  "audit_thresholds": {
+    "max_route_only_direct_label_count": 0,
+    "max_fallback_context_direct_label_count": 0,
+    "max_unresolved_tradable_candidate_count": 0,
+    "max_replay_feature_without_available_at": 0,
+    "max_missing_core_label_rate": 0.05,
+    "max_missing_price_bar_rate": 0.03,
+    "min_event_clusters": 100,
+    "min_macro_events": 1
+  }
+}

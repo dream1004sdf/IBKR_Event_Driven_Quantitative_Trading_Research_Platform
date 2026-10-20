@@ -1,0 +1,29 @@
+{
+  "policy_version": "paper-cycle-watch-daemon-policy-v1",
+  "milestone": "M136",
+  "description": "Finite daemon-style operation policy for calendar-gated paper watch batches.",
+  "watch_profile_json": "config/paper_cycle_watch_daemon_watch_profile_v1.json",
+  "daemon_profile_json": "config/paper_cycle_watch_daemon_profile_v1.json",
+  "required_behavior": [
+    "Daemon execution must be finite through max_batches.",
+    "Each batch must run the profile-backed paper watch runner and preserve checkpoint/watch-state duplicate controls.",
+    "Calendar/session gates must be evaluated before scheduler execution in every tick.",
+    "Each batch must be appended to a JSONL daily log with a final daemon summary record.",
+    "The daemon remains paper-only and must not submit, stage, preview, transmit, or mutate a real portfolio."
+  ],
+  "validation_cases": [
+    {
+      "name": "holiday_then_regular_then_after_early_close",
+      "session_gate_now_sequence": "2026-07-03T10:00:00-04:00,2026-11-27T12:30:00-05:00,2026-11-27T14:00:00-05:00",
+      "expected_batches": 3,
+      "expected_executed_ticks": 1,
+      "expected_session_skipped_ticks": 2
+    }
+  ],
+  "safety": {
+    "paper_only": true,
+    "live_order_routing_enabled": false,
+    "ibkr_order_submitted": false,
+    "transmit_enabled": false
+  }
+}

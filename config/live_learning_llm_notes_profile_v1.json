@@ -1,0 +1,44 @@
+{
+  "profile_version": "m225-live-learning-llm-notes-profile-v1",
+  "milestone": "M225",
+  "description": "OpenAI-backed shadow-only adjustment-note builder for M223 live-learning prediction/outcome gaps. It explains why predictions diverged from observed market reactions and never mutates the live scorer or trading thresholds.",
+  "paths": {
+    "database_path": "../market_events.db"
+  },
+  "llm_notes": {
+    "openai_model": "gpt-5.4-mini",
+    "limit": 10,
+    "min_packet_quality_score": 40.0,
+    "min_note_confidence": 0.55,
+    "min_reason_summary_chars": 80,
+    "min_evidence_weight_total": 0.75,
+    "max_ticks": 0,
+    "interval_seconds": 300.0,
+    "sleep_between_ticks": true,
+    "cooldown_seconds": 600.0,
+    "max_consecutive_errors": 5,
+    "adaptive_backlog_enabled": true,
+    "adaptive_min_limit": 3,
+    "adaptive_max_limit": 25,
+    "adaptive_low_backlog": 25,
+    "adaptive_high_backlog": 100,
+    "adaptive_critical_backlog": 300,
+    "adaptive_min_interval_seconds": 120.0,
+    "adaptive_max_interval_seconds": 900.0,
+    "note_version": "m225-llm-adjustment-notes-v1",
+    "dry_run": false
+  },
+  "outputs": {
+    "output": "../exports/m225_live_learning_llm_notes.md",
+    "json_output_path": "../exports/m225_live_learning_llm_notes.json",
+    "state_json_path": "../exports/m225_live_learning_llm_notes_state.json",
+    "focus_feedback_json_path": "../exports/m226_threshold_candidate_evaluator.json"
+  },
+  "safety": {
+    "shadow_only": true,
+    "orders_submitted": false,
+    "transmit_enabled": false,
+    "live_scorer_mutated": false,
+    "threshold_promoted": false
+  }
+}

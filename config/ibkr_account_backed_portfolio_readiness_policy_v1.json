@@ -1,0 +1,79 @@
+{
+  "policy_version": "ibkr-account-backed-portfolio-readiness-v1",
+  "created_at": "2026-06-30",
+  "milestone": "M110",
+  "purpose": "Use read-only IBKR account summary, positions, and open orders as the live budget context for M108 paper execution-readiness ticket drafts without submitting orders.",
+  "scope": {
+    "readiness_input": "exports/m108_m107_execution_readiness.json",
+    "account_snapshot_json": "exports/m110_ibkr_account_snapshot.json",
+    "account_snapshot_markdown": "exports/m110_ibkr_account_snapshot.md",
+    "account_backed_portfolio_report": "exports/m110_m108_account_backed_portfolio_readiness.json",
+    "account_backed_portfolio_markdown": "exports/m110_m108_account_backed_portfolio_readiness.md"
+  },
+  "account_snapshot": {
+    "account_selection": "If --account is not provided, select the account with the largest NetLiquidation value instead of sorting account IDs alphabetically.",
+    "equity_present": true,
+    "cash_present": true,
+    "buying_power_present": true,
+    "account_count": 2,
+    "position_count": 2,
+    "open_order_count": 0,
+    "account_values_redacted_in_policy": true,
+    "errors_count": 4,
+    "non_blocking_error_notes": [
+      "Market data farm OK status messages were reported by IBKR.",
+      "HMDS farm inactive-until-demand status was reported by IBKR.",
+      "IBKR read-only API mode rejected at least one request validation path, confirming the live API session is not order-enabled."
+    ]
+  },
+  "limits": {
+    "equity_haircut_pct": 0.0,
+    "cash_haircut_pct": 0.0,
+    "max_single_trade_risk_pct": 0.005,
+    "max_total_open_risk_pct": 0.05,
+    "max_gross_notional_pct": 1.0,
+    "max_option_risk_pct": 0.02,
+    "max_short_notional_pct": 0.2,
+    "max_symbol_risk_pct": 0.01,
+    "max_approved_tickets": 25
+  },
+  "source_readiness": {
+    "selected_allocations": 279,
+    "ticket_drafts": 279,
+    "actionable_ticket_drafts": 247,
+    "not_ready": 32,
+    "not_candidate": 200
+  },
+  "account_backed_result": {
+    "approved_ticket_count": 0,
+    "portfolio_status_counts": {
+      "not_candidate": 200,
+      "portfolio_not_ready": 247,
+      "not_ready": 32
+    },
+    "portfolio_check_failure_counts": {
+      "prior_execution_readiness_actionable": 232,
+      "single_trade_risk_within_mock_policy": 247,
+      "gross_notional_within_mock_policy": 209,
+      "short_notional_within_mock_policy": 102,
+      "symbol_risk_within_mock_policy": 247,
+      "cash_usage_within_mock_policy": 134,
+      "total_open_risk_within_mock_policy": 38,
+      "option_risk_within_mock_policy": 38
+    }
+  },
+  "interpretation": {
+    "status": "Read-only IBKR account integration succeeded, but current fixed-size paper tickets are too large for the selected live account budget under conservative M109 limits.",
+    "finding": "The binding failures are per-trade risk, per-symbol risk, gross notional, and cash usage. This is expected when fixed paper ticket sizes are applied directly to a smaller live account.",
+    "recommendation": "Add account-scaled position sizing before any live or paper order staging. The next milestone should resize stock quantity, stop-loss proxy, and option spread width/risk to fit account equity and cash budgets before re-running readiness."
+  },
+  "safety": {
+    "paper_only": true,
+    "read_only_ibkr_account_snapshot": true,
+    "positions_checked": true,
+    "open_orders_checked": true,
+    "margin_order_preview_checked": false,
+    "ibkr_order_submitted": false,
+    "live_order_routing_enabled": false
+  }
+}

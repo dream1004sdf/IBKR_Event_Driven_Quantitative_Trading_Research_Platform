@@ -1,0 +1,42 @@
+{
+  "policy_version": "paper-order-router-sim-fill-policy-v1",
+  "milestone": "M115",
+  "mode": "paper_only_simulated_fills",
+  "input": {
+    "source": "M114 execution intent ledger",
+    "accepted_intent_state": "pending_paper_execution",
+    "duplicate_key": "intent_id"
+  },
+  "routing": {
+    "default_fill_model": "immediate_local_estimate_fill_v1",
+    "default_max_orders": 10,
+    "default_slippage_bps": 0.0,
+    "default_commission_per_order": 0.0,
+    "fill_price_reference": 100.0,
+    "buy_notional_source_order": [
+      "absolute_negative_estimated_cash_impact",
+      "estimated_initial_margin_change"
+    ],
+    "sell_short_notional_source_order": [
+      "estimated_initial_margin_change_divided_by_1_5_for_local_short_stock_conservative_v1",
+      "estimated_initial_margin_change"
+    ]
+  },
+  "safety": {
+    "ibkr_order_submitted": false,
+    "transmit_enabled": false,
+    "live_order_routing_enabled": false,
+    "broker_api_call_enabled": false,
+    "portfolio_mutation_enabled": false,
+    "description": "M115 creates simulated paper orders, fills, and positions from pending M114 intents only. It must not call broker order APIs, transmit orders, or mutate a real portfolio."
+  },
+  "latest_validation": {
+    "router_run_id": "m115_20260630_initial",
+    "paper_order_count": 10,
+    "paper_fill_count": 10,
+    "paper_position_count": 5,
+    "duplicate_check_run_id": "m115_20260630_duplicate_check",
+    "duplicate_check_new_order_count": 0,
+    "duplicate_check_skipped_reason": "intent_already_paper_routed"
+  }
+}

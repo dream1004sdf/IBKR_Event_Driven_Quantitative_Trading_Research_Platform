@@ -1,0 +1,56 @@
+{
+  "policy_version": "paper-cycle-scheduler-policy-v1",
+  "milestone": "M129",
+  "mode": "paper_only_finite_cycle_scheduler",
+  "input": {
+    "auto_gate": "M113 autonomous execution gate JSON",
+    "initial_portfolio_risk_state": "M123/M126/M127/M128-compatible paper portfolio risk-state JSON",
+    "fill_marks": "M117-compatible mark snapshot JSON for entry fill reference prices",
+    "loop_marks": "One or more M117-compatible mark snapshot JSON files for each scheduler tick",
+    "optional_exit_router": "M121 paper exit-router JSON"
+  },
+  "scheduler_behavior": {
+    "finite_max_runs_required": true,
+    "interval_seconds_supported": true,
+    "sleep_between_runs_is_explicit": true,
+    "risk_state_handoff": true,
+    "carry_dedupe_state_across_runs_default": true,
+    "description": "Each scheduler tick runs a finite M128 batch, hands its next risk state into the next tick, and can carry dedupe state so repeated auto-gate rows are not re-filled."
+  },
+  "latest_validation": {
+    "scheduler_run_id": "m129_20260630_three_tick_paper_scheduler",
+    "runs_completed": 3,
+    "cycles_per_run": 1,
+    "interval_seconds": 0.0,
+    "dedupe_across_cycles": true,
+    "carry_dedupe_state_across_runs": true,
+    "tick_new_fills": [
+      10,
+      0,
+      0
+    ],
+    "final_cumulative_paper_fills": 10,
+    "final_risk_state": "within_limits",
+    "final_gate_action": "allow_new_entries",
+    "final_gross_exposure": 33.92,
+    "final_short_exposure": 24.64,
+    "final_total_pnl": 0.03,
+    "next_cycle_handoff_check": {
+      "ledger_run_id": "m129_20260630_next_cycle_handoff_check",
+      "pending_paper_execution_count": 10,
+      "blocked_by_portfolio_risk_state_count": 0
+    },
+    "outputs": {
+      "scheduler_report": "exports/m129_three_tick_paper_scheduler.json",
+      "next_portfolio_risk_state": "exports/m129_next_portfolio_risk_state.json"
+    }
+  },
+  "safety": {
+    "paper_only": true,
+    "ibkr_order_submitted": false,
+    "transmit_enabled": false,
+    "live_order_routing_enabled": false,
+    "portfolio_mutation_enabled": false,
+    "description": "M129 schedules finite paper-only cycle batches. It does not call broker order APIs, submit orders, transmit orders, or mutate a real portfolio."
+  }
+}

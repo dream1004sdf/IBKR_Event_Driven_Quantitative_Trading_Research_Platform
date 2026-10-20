@@ -1,0 +1,39 @@
+{
+  "policy_version": "paper-cycle-watch-preflight-gate-policy-v1",
+  "milestone": "M137",
+  "description": "Paper market-data quality preflight gate before M133/M135/M136 scheduler execution.",
+  "watch_profile_json": "config/paper_cycle_watch_preflight_profile_v1.json",
+  "daemon_profile_json": "config/paper_cycle_watch_preflight_daemon_profile_v1.json",
+  "required_behavior": [
+    "Evaluate fill_marks_json and loop_marks_jsons before scheduler execution when the session/calendar gate allows the tick.",
+    "Block paper scheduler execution when required marks are missing, delayed data is not allowed, or snapshots/ticks are stale beyond configured thresholds.",
+    "Expose preflight status in watch tick, runner, daemon, Markdown, and JSON outputs.",
+    "Keep the gate paper-only: it reads existing snapshot JSON files and does not request market data or submit/transmit orders."
+  ],
+  "default_thresholds": {
+    "max_snapshot_age_seconds": 28800.0,
+    "max_tick_age_seconds": 28800.0,
+    "allow_delayed": false,
+    "require_all_marked": true,
+    "min_marked_ratio": 1.0
+  },
+  "validation_cases": [
+    {
+      "name": "fresh_live_marks_pass",
+      "expected_preflight_status": "pass",
+      "expected_action": "executed_scheduler_tick"
+    },
+    {
+      "name": "stale_marks_block",
+      "expected_preflight_status": "block",
+      "expected_action": "skipped_preflight_gate"
+    }
+  ],
+  "safety": {
+    "paper_only": true,
+    "read_existing_market_data_snapshots_only": true,
+    "live_order_routing_enabled": false,
+    "ibkr_order_submitted": false,
+    "transmit_enabled": false
+  }
+}

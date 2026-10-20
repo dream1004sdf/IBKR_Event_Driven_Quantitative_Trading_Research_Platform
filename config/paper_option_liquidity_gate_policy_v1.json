@@ -1,0 +1,84 @@
+{
+  "policy_version": "paper-option-liquidity-gate-policy-v1",
+  "created_at": "2026-06-29",
+  "mode": "read_only_option_liquidity_gate_over_paper_allocations",
+  "purpose": "Allow paper option allocations to remain options only when an IBKR read-only option quote snapshot proves basic symbol-level option liquidity.",
+  "inputs": {
+    "allocation_json": "exports/m100_v14_nuanced_v1_stock_option_walk_forward_tuning.json",
+    "quote_json": "exports/m98_ibkr_option_quote_snapshot.json"
+  },
+  "gate_parameters": {
+    "max_spread_pct": 0.30,
+    "min_quoted_contracts_per_symbol": 1,
+    "min_volume": 0,
+    "min_open_interest": 0,
+    "require_iv": false,
+    "fallback_to_stock": true
+  },
+  "pass_definition": {
+    "quoted_contract": "quote_status must be quoted, meaning positive bid and positive ask with acceptable spread",
+    "symbol_liquidity_pass": "at least min_quoted_contracts_per_symbol quoted contracts and average spread at or below max_spread_pct",
+    "fallback": "if an option allocation fails liquidity but has a stock candidate, downgrade to the stock expression; otherwise block"
+  },
+  "live_replay_evidence": {
+    "run_at": "2026-06-29T11:24:02Z",
+    "command": "python main.py replay-score-strategy-liquidity-gate --allocation-json exports/m100_v14_nuanced_v1_stock_option_walk_forward_tuning.json --quote-json exports/m98_ibkr_option_quote_snapshot.json --max-spread-pct 0.30 --min-quoted-contracts-per-symbol 1 --min-volume 0 --min-open-interest 0",
+    "source_rows": 479,
+    "source_selected_allocations": 301,
+    "source_option_allocations": 70,
+    "option_allocations_passed": 0,
+    "option_allocations_downgraded_to_stock": 68,
+    "option_allocations_blocked": 2,
+    "gated_selected_allocations": 299,
+    "gated_selection_rate": 0.6242,
+    "gated_positive_realized": 184,
+    "gated_evaluated_allocations": 299,
+    "gated_positive_realized_rate": 0.6154,
+    "gated_total_pnl": 7376.55,
+    "gated_avg_pnl": 24.67,
+    "gated_instrument_split": {
+      "stock": 299,
+      "blocked": 180
+    },
+    "quote_profiles": {
+      "NVDA": {
+        "contracts_seen": 2,
+        "quoted_contracts": 0,
+        "close_only_contracts": 2,
+        "liquidity_pass": false,
+        "failed_reasons": [
+          "insufficient_quoted_contracts",
+          "spread_unavailable_or_too_wide"
+        ]
+      },
+      "TSLA": {
+        "contracts_seen": 2,
+        "quoted_contracts": 0,
+        "close_only_contracts": 2,
+        "liquidity_pass": false,
+        "failed_reasons": [
+          "insufficient_quoted_contracts",
+          "spread_unavailable_or_too_wide"
+        ]
+      }
+    },
+    "reports": [
+      "exports/m101_v14_nuanced_v1_option_liquidity_gate.md",
+      "exports/m101_v14_nuanced_v1_option_liquidity_gate.json"
+    ]
+  },
+  "safety": {
+    "paper_only": true,
+    "read_only_quote_snapshot": true,
+    "ibkr_order_submitted": false,
+    "account_or_portfolio_checked": false,
+    "margin_checked": false,
+    "scorer_rows_mutated": false
+  },
+  "known_limitations": [
+    "The M98 quote snapshot was captured before the US options regular session and returned close_only fields, not bid/ask liquidity.",
+    "The gate is symbol-level in this first version; it does not yet match the exact theoretical strike/expiration legs to live quoted contracts.",
+    "Historical replay rows cannot use future live liquidity snapshots as signal-time evidence; this gate is an execution-readiness overlay for current/paper allocations.",
+    "A market-hours rerun is required before enabling real option expression in any future execution pipeline."
+  ]
+}

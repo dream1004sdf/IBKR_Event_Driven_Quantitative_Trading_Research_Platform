@@ -1,0 +1,46 @@
+{
+  "policy_version": "paper-cycle-watch-ibkr-mark-refresh-live-validation-policy-v1",
+  "milestone": "M141",
+  "description": "Operational validation policy for real read-only IBKR stock mark refresh before paper-only daemon execution.",
+  "watch_profile_json": "config/paper_cycle_watch_ibkr_mark_refresh_live_validation_profile_v1.json",
+  "daemon_profile_json": "config/paper_cycle_watch_ibkr_mark_refresh_live_validation_daemon_profile_v1.json",
+  "required_behavior": [
+    "Attempt mark_refresh.mode=ibkr by default; do not use copy_existing for the primary validation path.",
+    "Use read-only reqMktData stock marks only and never submit, stage, preview, or transmit broker orders.",
+    "If IBKR refresh succeeds with complete live marks, record mark-refresh pass and run normal paper sizing.",
+    "If IBKR refresh fails or partially misses but fallback is fresh enough, record mark-refresh warn and apply M140 quality size reduction.",
+    "If both IBKR refresh and fallback quality fail, block scheduler execution through skipped_mark_refresh_gate.",
+    "Keep M137 preflight after refresh/fallback so stale, delayed, or missing marks remain independently blocked."
+  ],
+  "default_validation": {
+    "mode": "ibkr",
+    "market_data_type": 1,
+    "quote_seconds": 8.0,
+    "client_id_offset": 9500,
+    "fallback_max_source_age_seconds": 28800.0
+  },
+  "expected_outcomes": [
+    {
+      "condition": "IBKR connected and live stock data available",
+      "expected_mark_refresh_status": "pass",
+      "expected_quality_action": "allow"
+    },
+    {
+      "condition": "IBKR unavailable but fallback source is fresh",
+      "expected_mark_refresh_status": "warn",
+      "expected_quality_action": "size_reduce"
+    },
+    {
+      "condition": "IBKR unavailable and fallback source stale or missing",
+      "expected_action": "skipped_mark_refresh_gate"
+    }
+  ],
+  "safety": {
+    "paper_only": true,
+    "read_only_market_data_refresh": true,
+    "quality_actions_affect_paper_sizing_only": true,
+    "live_order_routing_enabled": false,
+    "ibkr_order_submitted": false,
+    "transmit_enabled": false
+  }
+}

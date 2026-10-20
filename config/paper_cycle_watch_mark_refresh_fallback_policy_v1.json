@@ -1,0 +1,52 @@
+{
+  "policy_version": "paper-cycle-watch-mark-refresh-fallback-policy-v1",
+  "milestone": "M139",
+  "description": "Fallback and partial-refresh policy for read-only stock mark refresh before M137 paper market-data preflight.",
+  "watch_profile_json": "config/paper_cycle_watch_mark_refresh_fallback_profile_v1.json",
+  "daemon_profile_json": "config/paper_cycle_watch_mark_refresh_fallback_daemon_profile_v1.json",
+  "required_behavior": [
+    "Run the calendar/session gate before any mark refresh attempt.",
+    "Attempt read-only IBKR stock mark refresh when the session gate allows the tick.",
+    "When refresh partially misses symbols, optionally reuse rows from a configured existing snapshot only if that fallback snapshot is fresh enough under max_source_age_seconds.",
+    "When refresh fails entirely, optionally reuse the configured existing snapshot only if the same fallback freshness and quality thresholds pass.",
+    "Preserve fallback row timestamps so the M137 preflight gate can independently block stale reused marks.",
+    "Block scheduler execution as skipped_mark_refresh_gate when the required refresh/fallback policy does not allow the tick.",
+    "Expose fallback source age, applied symbols, block reasons, and policy status in watch tick, runner, daemon, Markdown, and JSON outputs."
+  ],
+  "default_fallback": {
+    "enabled": true,
+    "reuse_on_failure": true,
+    "reuse_on_partial": true,
+    "max_source_age_seconds": 28800.0,
+    "min_marked_ratio": 1.0,
+    "max_missing_symbols": 0,
+    "allow_delayed": false
+  },
+  "validation_cases": [
+    {
+      "name": "fresh_fallback_recovers_partial_missing_symbol",
+      "expected_policy_status": "warn",
+      "expected_allowed": true
+    },
+    {
+      "name": "stale_fallback_blocks_even_if_it_can_fill_missing_symbol",
+      "expected_policy_status": "block",
+      "expected_block_reason": "fallback_source_not_allowed"
+    },
+    {
+      "name": "copy_existing_daemon_validation",
+      "override": "--mark-refresh-mode copy_existing",
+      "expected_mark_refresh_status": "pass",
+      "expected_preflight_status": "pass",
+      "expected_action": "executed_scheduler_tick"
+    }
+  ],
+  "safety": {
+    "paper_only": true,
+    "read_only_market_data_refresh": true,
+    "fallback_reuses_existing_paper_snapshots_only": true,
+    "live_order_routing_enabled": false,
+    "ibkr_order_submitted": false,
+    "transmit_enabled": false
+  }
+}

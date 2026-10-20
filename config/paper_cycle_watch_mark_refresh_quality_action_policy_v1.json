@@ -1,0 +1,59 @@
+{
+  "policy_version": "paper-cycle-watch-mark-refresh-quality-action-policy-v1",
+  "milestone": "M140",
+  "description": "Maps mark-refresh quality status into paper-only execution sizing and risk-state overlay actions.",
+  "watch_profile_json": "config/paper_cycle_watch_mark_refresh_quality_action_profile_v1.json",
+  "daemon_profile_json": "config/paper_cycle_watch_mark_refresh_quality_action_daemon_profile_v1.json",
+  "required_behavior": [
+    "Keep the M139 fallback and M137 preflight checks intact.",
+    "When mark-refresh quality status is pass, run normal paper entry sizing.",
+    "When mark-refresh quality status is warn, overlay the paper portfolio risk state as monitor and apply the configured monitor_size_multiplier to new paper entries.",
+    "When mark-refresh quality status is block, block new paper entries or skip execution through the existing mark-refresh gate.",
+    "Record the selected quality action and effective monitor size multiplier in tick, runner, daemon, Markdown, and JSON outputs.",
+    "Affect paper sizing/risk-state only; never submit, stage, transmit, or mutate real broker positions."
+  ],
+  "default_quality_actions": {
+    "pass": {
+      "action": "allow",
+      "monitor_size_multiplier": 0.5
+    },
+    "warn": {
+      "action": "size_reduce",
+      "portfolio_risk_state_override": "monitor",
+      "monitor_size_multiplier": 0.25
+    },
+    "block": {
+      "action": "block_new_entries",
+      "portfolio_risk_state_override": "reduce_risk",
+      "monitor_size_multiplier": 0.0
+    }
+  },
+  "validation_cases": [
+    {
+      "name": "warn_quality_overlays_within_limits_as_monitor",
+      "expected_quality_action": "size_reduce",
+      "expected_effective_monitor_size_multiplier": 0.25
+    },
+    {
+      "name": "pass_quality_does_not_overlay_portfolio_risk",
+      "expected_quality_action": "allow",
+      "expected_overlay_applied": false
+    },
+    {
+      "name": "copy_existing_daemon_validation",
+      "override": "--mark-refresh-mode copy_existing",
+      "expected_quality_action": "allow",
+      "expected_mark_refresh_status": "pass",
+      "expected_preflight_status": "pass",
+      "expected_action": "executed_scheduler_tick"
+    }
+  ],
+  "safety": {
+    "paper_only": true,
+    "quality_actions_affect_paper_sizing_only": true,
+    "read_only_market_data_refresh": true,
+    "live_order_routing_enabled": false,
+    "ibkr_order_submitted": false,
+    "transmit_enabled": false
+  }
+}

@@ -1,0 +1,8 @@
+ibapi==9.81.1.post1
+python-dotenv>=1.0.1
+rapidfuzz>=3.9.7
+exchange-calendars>=4.5.5
+pandas>=2.2.2
+pydantic>=2.12.0,<3.0.0
+openai>=2.44.0,<3.0.0
+pytest>=8.3.2

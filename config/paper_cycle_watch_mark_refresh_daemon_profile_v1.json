@@ -1,0 +1,28 @@
+{
+  "profile_version": "paper-cycle-watch-daemon-profile-v1",
+  "milestone": "M138",
+  "description": "M138 finite daemon profile for calendar-gated paper watch operation with mark refresh and data-quality preflight checks.",
+  "watch_profile_json": "paper_cycle_watch_mark_refresh_profile_v1.json",
+  "daemon": {
+    "max_batches": 3,
+    "ticks_per_batch": 1,
+    "batch_interval_seconds": 0.0,
+    "sleep_between_batches": false,
+    "runner_interval_seconds": 0.0,
+    "sleep_between_ticks": false,
+    "force_each_tick": false
+  },
+  "outputs": {
+    "output_dir": "../exports/m138_mark_refresh_watch_daemon",
+    "daily_log_jsonl": "../exports/m138_mark_refresh_watch_daemon_daily_log.jsonl",
+    "output": "../exports/m138_mark_refresh_watch_daemon.md",
+    "json_output_path": "../exports/m138_mark_refresh_watch_daemon.json"
+  },
+  "safety": {
+    "paper_only": true,
+    "mark_refresh_read_only_market_data": true,
+    "live_order_routing_enabled": false,
+    "ibkr_order_submitted": false,
+    "transmit_enabled": false
+  }
+}

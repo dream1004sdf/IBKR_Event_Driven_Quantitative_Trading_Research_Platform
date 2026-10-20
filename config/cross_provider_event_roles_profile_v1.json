@@ -1,0 +1,26 @@
+{
+  "version": "cross-provider-event-roles-profile-v1",
+  "milestone": "M236",
+  "description": "Classify BZ/Dow Jones/Marketaux events by event role, provider confirmation, and conflict. Produces scorer evidence packet v3 artifact. Alpha Vantage rows are excluded from active training inputs.",
+  "paths": {
+    "database_path": "../market_events.db",
+    "mesh_json": "../exports/m235_news_subscription_mesh.json"
+  },
+  "classifier": {
+    "lookback_minutes": 240,
+    "max_news_rows": 2000,
+    "max_external_rows": 1000,
+    "cluster_window_minutes": 45,
+    "write_outcome_log": true
+  },
+  "outputs": {
+    "output": "../exports/m236_cross_provider_event_roles.md",
+    "json_output_path": "../exports/m236_cross_provider_event_roles.json",
+    "outcome_log_jsonl_path": "../exports/m236_cross_provider_outcome_learning.jsonl"
+  },
+  "safety": {
+    "read_only_report": true,
+    "orders_submitted": false,
+    "broker_subscriptions_mutated": false
+  }
+}

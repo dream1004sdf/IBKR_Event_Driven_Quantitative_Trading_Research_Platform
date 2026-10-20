@@ -1,0 +1,31 @@
+{
+  "profile_version": "evidence-refresh-queue-profile-v1",
+  "milestone": "M153",
+  "description": "Plan or execute read-only refresh/backfill/rebuild jobs when the M152 Evidence Freshness Desk reports stale or lagging sources.",
+  "paths": {
+    "freshness_report_json": "../exports/m152_evidence_freshness_desk.json",
+    "evidence_freshness_profile_json": "../config/evidence_freshness_desk_profile_v1.json",
+    "dashboard_profile_json": "../config/trading_dashboard_snapshot_profile_v1.json",
+    "output_dir": "../exports"
+  },
+  "queue": {
+    "execute": false,
+    "market_data_seconds": 25,
+    "external_limit": 50,
+    "external_timespan": "3d",
+    "ibkr_news_limit_per_symbol": 25,
+    "technical_start_days": 14,
+    "job_timeout_seconds": 120.0
+  },
+  "outputs": {
+    "output": "../exports/m153_evidence_refresh_queue.md",
+    "json_output_path": "../exports/m153_evidence_refresh_queue.json"
+  },
+  "safety": {
+    "read_only_refresh_or_rebuild": true,
+    "scorer_rows_mutated": false,
+    "ibkr_order_submitted": false,
+    "transmit_enabled": false,
+    "secrets_written": false
+  }
+}

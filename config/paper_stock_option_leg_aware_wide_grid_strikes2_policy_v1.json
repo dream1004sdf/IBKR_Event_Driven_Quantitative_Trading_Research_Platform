@@ -1,0 +1,142 @@
+{
+  "policy_version": "paper-stock-option-leg-aware-wide-grid-strikes2-v1",
+  "created_at": "2026-06-29",
+  "milestone": "M107",
+  "purpose": "Run M102-scale wide-grid stock/option walk-forward tuning while applying the M106 strikes-around=2 live option-leg quote coverage inside every candidate evaluation.",
+  "scope": {
+    "scorer_name": "openai",
+    "model_name": "gpt-5.4-mini",
+    "scorer_version": "openai-replay-score-v14-nuanced-v1",
+    "price_source": "yahoo_chart_daily_adjclose",
+    "start": "2025-01-01",
+    "limit": 1000,
+    "quote_snapshot": "exports/m106_ibkr_regular_session_option_leg_quote_snapshot_strikes2.json",
+    "checkpoint": "work/m107_leg_aware_wide_grid_strikes2_checkpoint.json",
+    "reports": [
+      "exports/m107_v14_nuanced_v1_leg_aware_wide_grid_tuning_strikes2.md",
+      "exports/m107_v14_nuanced_v1_leg_aware_wide_grid_tuning_strikes2.json"
+    ]
+  },
+  "walk_forward": {
+    "rows": 719,
+    "fold_count": 6,
+    "min_train_rows": 240,
+    "test_window_rows": 80,
+    "step_rows": 80,
+    "rolling_train_rows": null
+  },
+  "leg_gate": {
+    "quote_snapshot_version": "ibkr-option-quote-snapshot-v1",
+    "quote_snapshot_coverage": "strikes-around=2, one expiration, call and put contracts",
+    "quote_generated_at": "2026-06-29T14:35:48.831040+00:00",
+    "max_leg_spread_pct": 0.3,
+    "fallback_to_stock": true,
+    "rule": "Every candidate parameter set is first converted to theoretical stock/option paper allocations, then passed through the M106 strikes-around=2 live-leg quote gate before optimizer scoring."
+  },
+  "grid": {
+    "combinations_per_fold": 2500,
+    "min_confidence_grid": [
+      0.3,
+      0.325,
+      0.35,
+      0.375,
+      0.4
+    ],
+    "min_stock_expected_return_grid": [
+      0.0025,
+      0.005,
+      0.0075,
+      0.01
+    ],
+    "min_option_score_grid": [
+      0.25,
+      0.3,
+      0.35,
+      0.4,
+      0.45
+    ],
+    "min_option_return_on_risk_grid": [
+      0.0,
+      0.05,
+      0.1,
+      0.15,
+      0.25
+    ],
+    "option_preference_edge_grid": [
+      0.0,
+      0.025,
+      0.05,
+      0.075,
+      0.1
+    ],
+    "min_selection_rate": 0.45,
+    "pnl_weight": 0.35,
+    "regret_penalty_weight": 0.25,
+    "option_usage_penalty_weight": 0.05
+  },
+  "fixed_assumptions": {
+    "underlying_reference_price": 100.0,
+    "stock_quantity": 10.0,
+    "stock_stop_loss_pct": 0.02,
+    "min_dte": 7,
+    "base_implied_vol": 0.55,
+    "risk_free_rate": 0.04,
+    "contract_multiplier": 100.0,
+    "moneyness_offset_pct": 0.0,
+    "spread_width_pct": 0.05
+  },
+  "result": {
+    "selected_allocations": 279,
+    "selection_rate": 0.5824634655532359,
+    "evaluated_allocations": 279,
+    "positive_realized": 169,
+    "positive_realized_rate": 0.6057347670250897,
+    "total_realized_pnl": 9457.713895650226,
+    "avg_realized_pnl": 33.89861611344167,
+    "avg_allocation_regret": 18.552852833281314,
+    "selected_instrument_counts": {
+      "blocked": 200,
+      "stock": 209,
+      "option": 70
+    },
+    "selected_strategy_counts": {
+      "blocked": 200,
+      "stock_short": 102,
+      "stock_long": 107,
+      "bull_call_debit_spread": 66,
+      "bear_put_debit_spread": 4
+    },
+    "option_gate_counts": {
+      "option_allocations_seen": 70,
+      "option_allocations_passed": 70,
+      "option_allocations_downgraded_to_stock": 0,
+      "option_allocations_blocked": 0
+    },
+    "matched_strategy_counts": {
+      "bull_call_debit_spread": 66,
+      "bear_put_debit_spread": 4
+    },
+    "failed_reason_counts": {}
+  },
+  "dominant_parameters": {
+    "min_confidence": 0.35,
+    "min_stock_expected_return": 0.0075,
+    "min_option_score": 0.25,
+    "min_option_return_on_risk": 0.25,
+    "option_preference_edge": 0.05,
+    "note": "Used in five of six folds; fold 2 selected min_confidence=0.375 and min_stock_expected_return=0.005 with the same option thresholds."
+  },
+  "interpretation": {
+    "status": "Best current leg-aware stock/option research candidate.",
+    "comparison": "M107 matches the M102 wide-grid aggregate result while proving that all selected option structures passed the M106 strikes-around=2 live-leg quote gate inside tuning.",
+    "recommendation": "Use M107 as the current preferred paper research policy for stock/option allocation. It remains paper-only and is not an execution policy until account, margin, position sizing, option order ticket construction, and exercise/assignment risk checks are implemented."
+  },
+  "safety": {
+    "paper_only": true,
+    "read_only_quote_snapshot": true,
+    "ibkr_order_submitted": false,
+    "account_or_portfolio_checked": false,
+    "margin_checked": false,
+    "positions_checked": false
+  }
+}

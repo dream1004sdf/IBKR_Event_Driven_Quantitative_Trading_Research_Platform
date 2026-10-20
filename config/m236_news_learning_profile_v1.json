@@ -1,0 +1,29 @@
+{
+  "version": "m236-news-learning-profile-v1",
+  "milestone": "M236",
+  "description": "Post-process M236 source-quality outcome records into provider weights, ticker verification, canonical freshness, scorer impact directives, and a learning plan.",
+  "paths": {
+    "event_roles_json": "../exports/m236_cross_provider_event_roles.json",
+    "outcome_learning_jsonl": "../exports/m236_cross_provider_outcome_learning.jsonl",
+    "evaluated_index_jsonl": "../exports/m236_evaluated_outcome_index.jsonl",
+    "macro_release_interpreter_json": "../exports/m237_macro_release_interpreter.json",
+    "signal_classification_notes_jsonl": "../exports/clean_backfill_signal_classification_notes.jsonl"
+  },
+  "learning": {
+    "max_records": 5000,
+    "evaluated_sample_records": 2000,
+    "max_evaluated_index_records": 20000,
+    "flat_return_threshold": 0.001
+  },
+  "outputs": {
+    "output": "../exports/m236_news_learning_report.md",
+    "json_output_path": "../exports/m236_news_learning_report.json",
+    "provider_profile_json": "../exports/m236_provider_weight_profile.json"
+  },
+  "safety": {
+    "read_only_report": true,
+    "orders_submitted": false,
+    "broker_subscriptions_mutated": false,
+    "mutates_live_scorer": false
+  }
+}

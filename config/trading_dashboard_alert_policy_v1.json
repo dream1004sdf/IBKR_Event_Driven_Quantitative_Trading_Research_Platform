@@ -1,0 +1,60 @@
+{
+  "policy_version": "trading-dashboard-alert-policy-v1",
+  "milestone": "M146-M160",
+  "description": "Dashboard alert de-duplication and escalation policy. A condition alerts once, remains quiet while unchanged, alerts again when it worsens, and can alert again after resolution if it reappears. Market Data Desk startup/flapping conditions use a short re-arm grace period, so a condition that resolves and reappears within the grace window only re-alerts if severity or magnitude worsens. M158-M160 extend this to evidence auto-recovery and source-ingest gaps that remain after a watch-loop or dashboard-loop pre-snapshot refresh.",
+  "dashboard_profile_json": "config/trading_dashboard_snapshot_profile_v1.json",
+  "input_contract": "trading-dashboard-snapshot-v1",
+  "loop_contract": "trading-dashboard-loop-v1",
+  "alert_contract": "trading-dashboard-alert-v1",
+  "default_thresholds": {
+    "buying_power_threshold": 100.0,
+    "available_funds_threshold": 100.0,
+    "worsening_min_delta": 1.0,
+    "worsening_relative": 0.1,
+    "market_data_rearm_grace_seconds": 120.0
+  },
+  "dedupe_rules": [
+    "emit an alert when a condition key appears for the first time",
+    "do not emit repeat alerts while the same condition remains unchanged",
+    "emit another alert when severity rank increases",
+    "emit another alert when magnitude worsens by max(worsening_min_delta, last_alerted_magnitude * worsening_relative)",
+    "mark inactive condition keys as resolved in state",
+    "when a resolved condition reappears, treat it as a new condition",
+    "for Market Data Desk startup/flapping conditions, suppress quick reappearance alerts during the grace window unless severity or magnitude worsens",
+    "resolution alert rows are disabled by default"
+  ],
+  "condition_families": [
+    "dashboard_status_non_green",
+    "status_reason:*",
+    "account_buying_power_below_threshold",
+    "account_available_funds_below_threshold",
+    "portfolio_risk_state_not_within_limits",
+    "mark_quality_delayed_rows",
+    "mark_quality_missing_marks",
+    "mark_quality_action:*",
+    "market_data_temperature_non_green",
+    "market_data_delayed_instruments",
+    "market_data_missing_prices",
+    "market_data_contract_or_subscription_errors",
+    "market_data_gap_or_sudden_move_alerts",
+    "evidence_freshness_stale_sources",
+    "evidence_freshness_lagging_sources",
+    "evidence_auto_recovery_failed",
+    "evidence_auto_recovery_gap_remains_after_refresh",
+    "source_ingest_health_online_required_gap",
+    "dashboard_missing_sources"
+  ],
+  "outputs": [
+    "m146 alert state JSON",
+    "m146 alert events JSONL",
+    "M145 loop summary alert counts"
+  ],
+  "safety": {
+    "alerts_only": true,
+    "read_only_dashboard_loop": true,
+    "paper_only_control_surface": true,
+    "ibkr_order_submitted": false,
+    "transmit_enabled": false,
+    "live_order_routing_enabled": false
+  }
+}

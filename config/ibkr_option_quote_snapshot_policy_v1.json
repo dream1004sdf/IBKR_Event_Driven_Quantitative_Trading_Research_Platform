@@ -1,0 +1,75 @@
+{
+  "policy_version": "ibkr-option-quote-snapshot-policy-v1",
+  "created_at": "2026-06-29",
+  "mode": "read_only_ibkr_option_quote_snapshot",
+  "purpose": "Request IBKR option market-data fields for preselected option-chain candidates without touching account, margin, portfolio, or order paths.",
+  "allowed_ibkr_requests": [
+    "reqContractDetails",
+    "reqSecDefOptParams",
+    "reqMktData",
+    "cancelMktData",
+    "reqMarketDataType"
+  ],
+  "forbidden_ibkr_requests": [
+    "placeOrder",
+    "reqAccountSummary",
+    "reqAccountUpdates",
+    "reqPositions",
+    "reqPortfolio",
+    "reqOpenOrders",
+    "reqAllOpenOrders",
+    "reqGlobalCancel"
+  ],
+  "candidate_policy": {
+    "source": "M97 option-chain candidate templates",
+    "limit_behavior": "balance selected quote candidates across symbols before applying max_quote_contracts",
+    "default_market_data_type": 3,
+    "default_generic_ticks": "100,101,104,106",
+    "quote_quality_statuses": [
+      "quoted",
+      "wide_spread",
+      "last_only",
+      "close_only",
+      "no_quote"
+    ],
+    "quoted_contract_definition": "A contract is counted as quoted only when bid and ask are both positive; close_only confirms field receipt but is not executable liquidity."
+  },
+  "live_evidence": {
+    "run_at": "2026-06-29T10:52:28Z",
+    "command": "python main.py ibkr-options-quote-snapshot --symbols NVDA,TSLA --reference-prices NVDA=120,TSLA=250 --min-dte 7 --max-dte 60 --strikes-around 0 --max-expirations 1 --max-quote-contracts 4 --market-data-type 4 --generic-ticks 100,101,104,106 --chain-timeout 15 --quote-seconds 10 --max-spread-pct 0.30 --client-id 7125",
+    "symbols": [
+      "NVDA",
+      "TSLA"
+    ],
+    "requested_quotes": 4,
+    "status_counts": {
+      "close_only": 4
+    },
+    "quoted_contracts_with_bid_ask": 0,
+    "quoted_rate": 0.0,
+    "observed_market_data_type": 1,
+    "observed_delayed": false,
+    "warnings": [
+      {
+        "code": 2107,
+        "message": "HMDS data farm connection is inactive but should be available upon demand.ushmds"
+      }
+    ],
+    "reports": [
+      "exports/m98_ibkr_option_quote_snapshot.md",
+      "exports/m98_ibkr_option_quote_snapshot.json"
+    ]
+  },
+  "safety": {
+    "paper_only": true,
+    "read_only_quote_snapshot": true,
+    "ibkr_order_submitted": false,
+    "account_or_portfolio_checked": false,
+    "margin_checked": false
+  },
+  "known_limitations": [
+    "The live validation was run before the US options regular session, so bid/ask liquidity was not observed even though close fields were returned.",
+    "IBKR may return the active market-data type as live/frozen even when delayed/frozen-delayed was requested, depending on account subscriptions and session state.",
+    "This policy does not yet approve liquidity scoring, IV surface construction, spread strategy routing, margin checks, or execution."
+  ]
+}

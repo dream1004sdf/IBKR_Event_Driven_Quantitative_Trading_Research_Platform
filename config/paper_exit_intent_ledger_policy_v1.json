@@ -1,0 +1,44 @@
+{
+  "policy_version": "paper-exit-intent-ledger-policy-v1",
+  "milestone": "M120",
+  "mode": "paper_only_exit_intent_ledger",
+  "input": {
+    "source": "M119 paper position mark-to-market time-series JSON",
+    "position_scope": "latest_positions only",
+    "default_exit_signals": [
+      "take_profit",
+      "stop_loss",
+      "max_loss_dollars"
+    ]
+  },
+  "intent_rules": {
+    "eligible": "latest position exit_signal is in the configured exit signal list and has suggested_close_action plus suggested_close_quantity",
+    "intent_id": "stable hash of source_router_run_id, symbol, close action, close quantity, and exit_signal",
+    "order_preview": {
+      "order_type": "MKT",
+      "what_if": true,
+      "transmit": false,
+      "paper_exit_only": true
+    },
+    "duplicates": "existing exit_intent_id is marked duplicate_existing_exit_intent"
+  },
+  "latest_validation": {
+    "ledger_run_id": "m120_20260630_m119_exit_intent_ledger",
+    "source_series_run_id": "m119_20260630_m118_mark_refresh_series",
+    "source_latest_position_count": 5,
+    "exit_intent_count": 0,
+    "pending_exit_intent_count": 0,
+    "skipped_counts": {
+      "exit_signal:hold": 5
+    },
+    "output": "exports/m120_m119_paper_exit_intent_ledger.json"
+  },
+  "safety": {
+    "paper_only": true,
+    "ibkr_order_submitted": false,
+    "transmit_enabled": false,
+    "live_order_routing_enabled": false,
+    "portfolio_mutation_enabled": false,
+    "description": "M120 records paper exit intents only. It does not close paper positions, call broker order APIs, submit orders, transmit orders, or mutate a real portfolio."
+  }
+}

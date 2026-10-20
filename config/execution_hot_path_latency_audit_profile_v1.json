@@ -1,0 +1,117 @@
+{
+  "policy_version": "execution-hot-path-latency-audit-profile-v1",
+  "created_at": "2026-07-01",
+  "milestone": "M210",
+  "purpose": "Audit the pre-order execution hot path from signal artifacts through final release gates, preview/what-if caches, and paper router safety without submitting IBKR orders.",
+  "hot_path_latency_budget": {
+    "enabled": true,
+    "max_dashboard_tick_seconds": 0.75,
+    "max_release_governed_inline_seconds": 0.1,
+    "max_total_artifact_read_ms": 120.0,
+    "stale_required_artifact_action": "fail_closed_block_new_entries",
+    "stale_optional_artifact_action": "warn_and_keep_final_gates_blocking_if_needed",
+    "stages": {
+      "source_evidence_packet": {
+        "role": "Pre-warmed source/evidence packet used by scorer/action context.",
+        "json_path": "../exports/m173_source_online_supervisor.json",
+        "required": true,
+        "execution_mode": "prewarmed_artifact",
+        "source_owner": "source_online_supervisor",
+        "max_artifact_age_seconds": 300.0,
+        "warn_artifact_age_seconds": 120.0,
+        "max_read_ms": 15.0,
+        "hard_gate": true
+      },
+      "market_data_context": {
+        "role": "Live/proxy market temperature, session, delayed/missing data, and volatility context.",
+        "json_path": "../exports/m153_market_data_desk_refresh.json",
+        "required": true,
+        "execution_mode": "prewarmed_artifact",
+        "source_owner": "source_online_supervisor",
+        "max_artifact_age_seconds": 300.0,
+        "warn_artifact_age_seconds": 60.0,
+        "max_read_ms": 15.0,
+        "hard_gate": true
+      },
+      "market_data_risk_gate": {
+        "role": "Fast market-data gate that converts market context into allow/haircut/block controls.",
+        "json_path": "../exports/m175_dashboard_market_data_risk_gate_latest.json",
+        "required": true,
+        "execution_mode": "cheap_inline_or_recent_artifact",
+        "source_owner": "dashboard_final_gate",
+        "max_artifact_age_seconds": 120.0,
+        "warn_artifact_age_seconds": 30.0,
+        "max_read_ms": 15.0,
+        "hard_gate": true
+      },
+      "operating_auto_gate": {
+        "role": "Strategy/action gate that narrows ordinary alpha, defensive, hedge, and risk-reduction paths.",
+        "json_path": "../exports/m199_market_data_operating_auto_gate.json",
+        "required": true,
+        "execution_mode": "cheap_inline_or_recent_artifact",
+        "source_owner": "dashboard_final_gate",
+        "max_artifact_age_seconds": 120.0,
+        "warn_artifact_age_seconds": 30.0,
+        "max_read_ms": 20.0,
+        "hard_gate": true
+      },
+      "session_transition_release_governor": {
+        "role": "Final ordinary-alpha release gate after session-transition, market-data, portfolio, and evidence checks.",
+        "json_path": "../exports/m206_session_transition_release_governor.json",
+        "required": true,
+        "execution_mode": "cheap_inline_final_gate",
+        "source_owner": "dashboard_final_gate",
+        "max_artifact_age_seconds": 120.0,
+        "warn_artifact_age_seconds": 30.0,
+        "max_read_ms": 20.0,
+        "hard_gate": true
+      },
+      "release_governed_execution_intent_ledger": {
+        "role": "Release-governed intent ledger that must have zero stale pending ordinary-alpha intents when release is blocked.",
+        "json_path": "../exports/m206_release_governed_execution_intent_ledger.json",
+        "required": true,
+        "execution_mode": "cheap_inline_final_gate",
+        "source_owner": "dashboard_final_gate",
+        "max_artifact_age_seconds": 120.0,
+        "warn_artifact_age_seconds": 30.0,
+        "max_read_ms": 35.0,
+        "hard_gate": true
+      },
+      "paper_router_preview": {
+        "role": "Paper router validation artifact; may simulate paper fills but must never route live or transmit.",
+        "json_path": "../exports/m206_release_governed_paper_order_router.json",
+        "required": true,
+        "execution_mode": "paper_only_router_artifact",
+        "source_owner": "dashboard_final_gate",
+        "max_artifact_age_seconds": 120.0,
+        "warn_artifact_age_seconds": 30.0,
+        "max_read_ms": 20.0,
+        "hard_gate": true
+      },
+      "broker_margin_whatif_cache": {
+        "role": "Broker what-if/margin preview cache. It is slower and should be refreshed before order time, not inside the emergency hot path.",
+        "json_path": "../exports/m211_ibkr_defensive_order_whatif_cache.json",
+        "fallback_json_path": "../exports/m190_defensive_broker_gate_v4/m189_ibkr_defensive_order_whatif_attempt_01.json",
+        "required": false,
+        "execution_mode": "precomputed_broker_whatif_cache",
+        "source_owner": "pretrade_cache_supervisor",
+        "max_artifact_age_seconds": 86400.0,
+        "warn_artifact_age_seconds": 300.0,
+        "recommended_operational_max_age_seconds": 300.0,
+        "max_read_ms": 20.0,
+        "hard_gate": false
+      }
+    }
+  },
+  "safety_requirements": {
+    "ibkr_order_submitted": false,
+    "transmit_enabled": false,
+    "live_order_routing_enabled": false,
+    "portfolio_mutated": false,
+    "scorer_rows_mutated": false,
+    "what_if_only_when_broker_api_called": true
+  },
+  "default_inputs": {
+    "loop_summary_json": "../exports/m210_trading_dashboard_loop_summary_hot_path_test.json"
+  }
+}

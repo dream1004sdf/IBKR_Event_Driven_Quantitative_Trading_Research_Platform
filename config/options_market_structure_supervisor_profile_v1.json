@@ -1,0 +1,205 @@
+{
+  "profile_version": "options-market-structure-supervisor-profile-v1",
+  "milestone": "M222",
+  "description": "Read-only supervisor that keeps fresh core ETF option quote snapshots and optional index-option market-structure reports warm during regular listed-option sessions. Optional index failures do not block ETF proxy coverage. M219 v8 adds index family capability probes, direct/mini/proxy fallback selection, family quote-budget allocation, and M220 live-validation checklist output. M222 adds automatic option-structure outcome logging after fresh structure rebuilds for later GEX/wall/max-pain learning.",
+  "symbol_groups": {
+    "core_etf_proxies": [
+      "SPY",
+      "QQQ",
+      "IWM",
+      "DIA"
+    ],
+    "optional_index_options": [
+      "SPX",
+      "XSP",
+      "NDX",
+      "XND",
+      "RUT",
+      "VIX",
+      "VXX",
+      "VIXY",
+      "UVXY"
+    ]
+  },
+  "index_option_families": [
+    {
+      "family_id": "sp500",
+      "label": "S&P 500",
+      "direct_symbols": ["SPX"],
+      "mini_symbols": ["XSP"],
+      "proxy_symbols": ["SPY", "ES"],
+      "notes": "Prefer direct SPX; use XSP mini or SPY/ES proxy if direct index coverage is unavailable."
+    },
+    {
+      "family_id": "nasdaq100",
+      "label": "Nasdaq 100",
+      "direct_symbols": ["NDX"],
+      "mini_symbols": ["XND"],
+      "proxy_symbols": ["QQQ", "NQ"],
+      "notes": "Prefer direct NDX; use XND mini or QQQ/NQ proxy if direct index coverage is unavailable."
+    },
+    {
+      "family_id": "russell2000",
+      "label": "Russell 2000",
+      "direct_symbols": ["RUT"],
+      "mini_symbols": [],
+      "proxy_symbols": ["IWM", "RTY"],
+      "notes": "RUT direct coverage is optional; IWM/RTY proxy coverage remains usable."
+    },
+    {
+      "family_id": "dow30",
+      "label": "Dow / Industrials",
+      "direct_symbols": [],
+      "mini_symbols": [],
+      "proxy_symbols": ["DIA", "YM"],
+      "notes": "DIA/YM are proxy-only broad-market option pressure context."
+    },
+    {
+      "family_id": "volatility",
+      "label": "Volatility",
+      "direct_symbols": ["VIX"],
+      "mini_symbols": [],
+      "proxy_symbols": ["VXX", "VIXY", "UVXY"],
+      "notes": "VIX direct options are preferred; VXX/VIXY/UVXY provide ETF/ETN proxy candidates if direct VIX coverage fails."
+    }
+  ],
+  "symbols": [
+    "SPY",
+    "QQQ",
+    "IWM",
+    "DIA"
+  ],
+  "optional_index_symbols": [
+    "SPX",
+    "XSP",
+    "NDX",
+    "XND",
+    "RUT",
+    "VIX",
+    "VXX",
+    "VIXY",
+    "UVXY"
+  ],
+  "underlying_sec_types": {
+    "SPX": "IND",
+    "XSP": "IND",
+    "NDX": "IND",
+    "XND": "IND",
+    "RUT": "IND",
+    "VIX": "IND"
+  },
+  "underlying_exchanges": {
+    "SPX": "CBOE",
+    "XSP": "CBOE",
+    "NDX": "NASDAQ",
+    "XND": "CBOE",
+    "RUT": "CBOE",
+    "VIX": "CBOE"
+  },
+  "paths": {
+    "quote_json_path": "../exports/m218_fresh_option_quote_snapshot.json",
+    "quote_markdown_path": "../exports/m218_fresh_option_quote_snapshot.md",
+    "structure_json_path": "../exports/m217_options_market_structure_desk.json",
+    "structure_markdown_path": "../exports/m217_options_market_structure_desk.md",
+    "optional_index_quote_json_path": "../exports/m219_optional_index_option_quote_snapshot.json",
+    "optional_index_quote_markdown_path": "../exports/m219_optional_index_option_quote_snapshot.md",
+    "optional_index_structure_json_path": "../exports/m219_optional_index_options_market_structure_desk.json",
+    "optional_index_structure_markdown_path": "../exports/m219_optional_index_options_market_structure_desk.md",
+    "option_structure_outcome_json_path": "../exports/m222_option_structure_outcome_log.json",
+    "option_structure_outcome_markdown_path": "../exports/m222_option_structure_outcome_log.md",
+    "optional_index_option_structure_outcome_json_path": "../exports/m222_optional_index_option_structure_outcome_log.json",
+    "optional_index_option_structure_outcome_markdown_path": "../exports/m222_optional_index_option_structure_outcome_log.md",
+    "index_option_capability_probe_json_path": "../exports/m219_index_option_capability_probe.json",
+    "index_option_capability_probe_markdown_path": "../exports/m219_index_option_capability_probe.md",
+    "market_data_json_path": "../exports/m153_market_data_desk_refresh.json",
+    "state_json_path": "../exports/m219_options_market_structure_supervisor_state.json",
+    "tick_log_jsonl_path": "../exports/m219_options_market_structure_supervisor_ticks.jsonl"
+  },
+  "schedule": {
+    "max_ticks": 1,
+    "interval_seconds": 60.0,
+    "sleep_between_ticks": false,
+    "execute_actions": false,
+    "regular_session_only": true,
+    "timezone": "America/New_York",
+    "regular_start": "09:30",
+    "regular_end": "16:00",
+    "max_snapshot_age_minutes": 30.0,
+    "warmup_max_snapshot_age_minutes": 45.0,
+    "close_window_max_snapshot_age_minutes": 10.0,
+    "open_warmup_minutes": 15.0,
+    "close_refresh_window_minutes": 60.0,
+    "quote_refresh_cooldown_seconds": 180.0,
+    "proactive_quote_refresh_ratio": 0.5,
+    "structure_refresh_cooldown_seconds": 30.0,
+    "capability_probe_cooldown_seconds": 600.0,
+    "symbol_failure_backoff_seconds": 120.0,
+    "low_quality_backoff_seconds": 60.0,
+    "max_symbol_failures_before_isolation": 3,
+    "symbol_isolation_seconds": 900.0,
+    "symbol_status_ttl_hours": 72.0,
+    "symbol_failure_note_ttl_hours": 24.0,
+    "job_timeout_seconds": 240.0,
+    "preferred_refresh_windows": [
+      "regular_open_plus_15m",
+      "midday",
+      "close_minus_90m",
+      "close_minus_30m"
+    ]
+  },
+  "quote_snapshot": {
+    "min_dte": 0,
+    "max_dte": 45,
+    "strikes_around": 4,
+    "max_expirations": 3,
+    "max_quote_contracts": 240,
+    "max_quote_contracts_by_phase": {
+      "regular_open_warmup": 160,
+      "regular_midday": 220,
+      "regular_close_window": 300,
+      "default": 240
+    },
+    "optional_index_max_quote_contracts_by_phase": {
+      "regular_open_warmup": 80,
+      "regular_midday": 140,
+      "regular_close_window": 220,
+      "default": 120
+    },
+    "index_family_quote_budget_weights": {
+      "sp500": 0.35,
+      "nasdaq100": 0.30,
+      "russell2000": 0.15,
+      "volatility": 0.15,
+      "dow30": 0.05
+    },
+    "market_data_type": 1,
+    "generic_ticks": "100,101,104,106",
+    "chain_timeout_seconds": 20.0,
+    "quote_seconds": 10.0,
+    "max_spread_pct": 0.3,
+    "min_symbol_quoted_contracts": 2,
+    "min_symbol_quoted_rate": 0.2
+  },
+  "options_market_structure": {
+    "pin_near_pct": 0.5,
+    "proximity_near_pct": 1.0,
+    "max_snapshot_age_minutes": 30.0
+  },
+  "option_structure_outcomes": {
+    "enabled": true,
+    "price_source": "ibkr",
+    "horizons": "5M,15M,30M,EOD",
+    "flat_threshold": 0.001
+  },
+  "outputs": {
+    "output": "../exports/m219_options_market_structure_supervisor.md",
+    "json_output_path": "../exports/m219_options_market_structure_supervisor.json"
+  },
+  "safety": {
+    "read_only": true,
+    "ibkr_order_submitted": false,
+    "transmit_enabled": false,
+    "live_order_routing_enabled": false,
+    "portfolio_mutated": false
+  }
+}

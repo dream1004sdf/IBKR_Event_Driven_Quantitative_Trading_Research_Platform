@@ -1,0 +1,40 @@
+{
+  "pricing_version": "ai-cost-pricing-v1",
+  "currency": "USD",
+  "unit": "per_1m_tokens",
+  "description": "Editable local pricing table for AI cost reporting. Standard prices are used for estimated_cost; batch_* prices are reported separately when available. Update these values when provider pricing changes.",
+  "source_url": "https://developers.openai.com/api/docs/pricing",
+  "checked_at": "2026-07-03",
+  "models": {
+    "heuristic-v1": {
+      "input_per_1m": 0.0,
+      "cached_input_per_1m": 0.0,
+      "output_per_1m": 0.0,
+      "note": "Local heuristic scorer; no provider API cost."
+    },
+    "gpt-5.4": {
+      "input_per_1m": 5.0,
+      "cached_input_per_1m": 0.5,
+      "output_per_1m": 30.0,
+      "batch_input_per_1m": 2.5,
+      "batch_cached_input_per_1m": 0.25,
+      "batch_output_per_1m": 15.0,
+      "note": "OpenAI API pricing page standard price; model page shows batch price."
+    },
+    "gpt-5.4-mini": {
+      "input_per_1m": 1.5,
+      "cached_input_per_1m": 0.15,
+      "output_per_1m": 9.0,
+      "batch_input_per_1m": 0.75,
+      "batch_cached_input_per_1m": 0.075,
+      "batch_output_per_1m": 4.5,
+      "note": "OpenAI API pricing page standard price; model page shows batch price."
+    },
+    "gpt-5.5": {
+      "input_per_1m": 12.5,
+      "cached_input_per_1m": 1.25,
+      "output_per_1m": 75.0,
+      "note": "OpenAI API pricing page standard price. Batch price omitted unless confirmed."
+    }
+  }
+}

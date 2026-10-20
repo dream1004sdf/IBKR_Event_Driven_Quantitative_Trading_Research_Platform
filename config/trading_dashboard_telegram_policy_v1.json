@@ -1,0 +1,33 @@
+{
+  "policy_version": "trading-dashboard-telegram-policy-v1",
+  "milestone": "M147",
+  "description": "Telegram delivery channel for M146 de-duplicated dashboard alerts. Delivery only occurs for emitted alert events, so unchanged conditions do not produce repeat Telegram messages.",
+  "dashboard_profile_json": "config/trading_dashboard_snapshot_profile_v1.json",
+  "input_alert_contract": "trading-dashboard-alert-v1",
+  "telegram_delivery_contract": "trading-dashboard-telegram-alert-v1",
+  "credentials": {
+    "bot_token_env": "TELEGRAM_BOT_TOKEN",
+    "chat_id_env": "TELEGRAM_CHAT_ID",
+    "store_token_in_logs": false,
+    "store_chat_id_in_logs": false
+  },
+  "delivery_rules": [
+    "send Telegram only when M146 emits one or more alert events",
+    "batch all alert events from one dashboard tick into one Telegram message",
+    "do not send anything for repeated unchanged conditions",
+    "log skipped_missing_credentials when token or chat id is unavailable",
+    "log dry_run_not_sent when dry-run mode is enabled",
+    "never include the bot token in JSON outputs or Markdown summaries"
+  ],
+  "outputs": [
+    "m147 Telegram delivery JSONL"
+  ],
+  "safety": {
+    "telegram_alerts_only": true,
+    "read_only_dashboard_loop": true,
+    "paper_only_control_surface": true,
+    "ibkr_order_submitted": false,
+    "transmit_enabled": false,
+    "live_order_routing_enabled": false
+  }
+}

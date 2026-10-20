@@ -1,0 +1,42 @@
+{
+  "policy_version": "paper-position-mark-to-market-policy-v1",
+  "milestone": "M116",
+  "mode": "paper_only_mark_to_market_and_exit_signals",
+  "input": {
+    "source": "M115 paper order-router JSON",
+    "mark_sources": [
+      "marks_json",
+      "inline SYMBOL=PRICE marks",
+      "future IBKR market-data mark feed using the same normalized mark format"
+    ]
+  },
+  "thresholds": {
+    "default_take_profit_pct": 0.03,
+    "default_stop_loss_pct": 0.02,
+    "default_max_loss_dollars": null
+  },
+  "exit_signal_rules": {
+    "take_profit": "paper_unrealized_pnl_pct >= take_profit_pct",
+    "stop_loss": "paper_unrealized_pnl_pct <= -stop_loss_pct",
+    "max_loss_dollars": "paper_unrealized_pnl <= -abs(max_loss_dollars), when configured",
+    "hold": "mark exists and no exit threshold is breached",
+    "mark_missing": "no mark price exists for the symbol"
+  },
+  "safety": {
+    "ibkr_order_submitted": false,
+    "transmit_enabled": false,
+    "live_order_routing_enabled": false,
+    "broker_api_call_enabled": false,
+    "portfolio_mutation_enabled": false,
+    "description": "M116 marks simulated paper positions and emits paper exit signals only. It must not call broker order APIs, transmit orders, or mutate a real portfolio."
+  },
+  "latest_validation": {
+    "mark_run_id": "m116_20260630_baseline_fill_marks",
+    "marked_position_count": 5,
+    "missing_mark_count": 0,
+    "exit_signal_counts": {
+      "hold": 5
+    },
+    "paper_unrealized_pnl": 0.0
+  }
+}

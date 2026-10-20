@@ -1,0 +1,53 @@
+{
+  "policy_version": "paper-required-entry-risk-gate-router-policy-v1",
+  "milestone": "M125",
+  "mode": "paper_only_required_portfolio_risk_gated_router",
+  "input": {
+    "standard_entry_ledger": "M124 portfolio-risk-gated execution intent ledger JSON",
+    "marks": "M117 stock mark snapshot JSON or compatible marks JSON"
+  },
+  "router_requirement": {
+    "require_portfolio_risk_gate": true,
+    "allowed_gate_actions": [
+      "allow_new_entries",
+      "allow_with_monitor_haircut"
+    ],
+    "blocked_when_missing_gate": true,
+    "blocked_when_unknown_gate_action": true
+  },
+  "monitor_haircut_behavior": {
+    "source": "M124 execution intent ledger",
+    "description": "When M123 risk_state is monitor, M124 reduces intent quantity and local margin estimates before M125 consumes the ledger. M125 then fills the reduced paper quantity only."
+  },
+  "latest_validation": {
+    "standard_router_run_id": "m125_20260630_m124_required_gate_router",
+    "source_ledger_run_id": "m124_20260630_m123_risk_gated_entry_intents",
+    "source_risk_state": "within_limits",
+    "paper_order_count": 10,
+    "paper_fill_count": 10,
+    "paper_position_count": 5,
+    "gross_fill_notional": 33.9265,
+    "legacy_ungated_block_check": {
+      "router_run_id": "m125_20260630_legacy_ungated_block_check",
+      "paper_order_count": 0,
+      "skipped_missing_required_portfolio_risk_gate": 10
+    },
+    "monitor_haircut_check": {
+      "ledger_run_id": "m125_20260630_monitor_haircut_entry_intents",
+      "router_run_id": "m125_20260630_monitor_haircut_required_gate_router",
+      "monitor_size_multiplier": 0.5,
+      "gross_fill_notional": 16.96325,
+      "paper_order_count": 10,
+      "paper_fill_count": 10
+    },
+    "output": "exports/m125_m124_required_gate_paper_order_router.json"
+  },
+  "safety": {
+    "paper_only": true,
+    "ibkr_order_submitted": false,
+    "transmit_enabled": false,
+    "live_order_routing_enabled": false,
+    "portfolio_mutation_enabled": false,
+    "description": "M125 creates simulated paper orders and fills only after M124 portfolio-risk-gated intents. It does not call broker order APIs, submit orders, transmit orders, or mutate a real portfolio."
+  }
+}

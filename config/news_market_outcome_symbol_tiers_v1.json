@@ -1,0 +1,140 @@
+{
+  "version": "news-market-outcome-symbol-tiers-v1",
+  "description": "Controls which symbols receive deep per-news intraday outcome backfill during clean historical rebuilds.",
+  "default_unknown_tier": "unclassified_review",
+  "tiers": {
+    "core_always": {
+      "collection_mode": "full_intraday",
+      "priority": 10,
+      "description": "Always relevant to US index/AI-market expression and should receive deep intraday outcome backfill.",
+      "symbols": [
+        "SPY",
+        "QQQ",
+        "IWM",
+        "DIA",
+        "NVDA",
+        "TSM",
+        "SMH",
+        "SOXX",
+        "AAPL",
+        "MSFT",
+        "AMZN",
+        "META",
+        "GOOGL",
+        "TSLA",
+        "AVGO",
+        "AMD",
+        "MU"
+      ],
+      "keywords": [
+        "ai",
+        "chip",
+        "semiconductor",
+        "nasdaq",
+        "s&p",
+        "dow",
+        "small cap",
+        "mega cap"
+      ]
+    },
+    "macro_proxy": {
+      "collection_mode": "full_intraday",
+      "priority": 20,
+      "description": "Macro/cross-asset proxies that can explain index moves even when single-stock news is absent.",
+      "symbols": [
+        "GLD",
+        "USO",
+        "XLE",
+        "XOM",
+        "CVX",
+        "UUP",
+        "TLT"
+      ],
+      "keywords": [
+        "fed",
+        "inflation",
+        "yield",
+        "dollar",
+        "gold",
+        "oil",
+        "energy",
+        "crude",
+        "treasury",
+        "rates"
+      ]
+    },
+    "geopolitical_event_proxy": {
+      "collection_mode": "event_window",
+      "priority": 30,
+      "description": "Event-triggered geopolitical/security proxies. Backfill only matching news windows unless explicitly forced.",
+      "symbols": [
+        "ITA",
+        "XAR",
+        "EWY",
+        "DBA",
+        "WEAT"
+      ],
+      "keywords": [
+        "war",
+        "strike",
+        "missile",
+        "iran",
+        "israel",
+        "hormuz",
+        "russia",
+        "ukraine",
+        "taiwan",
+        "china",
+        "korea",
+        "north korea",
+        "defense",
+        "aerospace",
+        "grain",
+        "wheat",
+        "food",
+        "sanction",
+        "tariff"
+      ]
+    },
+    "theme_event_proxy": {
+      "collection_mode": "event_window",
+      "priority": 40,
+      "description": "Theme proxies that should be activated by matching theme/security/sector headlines.",
+      "symbols": [
+        "CIBR",
+        "HACK"
+      ],
+      "keywords": [
+        "cyber",
+        "cybersecurity",
+        "hack",
+        "ransomware",
+        "breach",
+        "crowdstrike",
+        "palo alto",
+        "security software"
+      ]
+    },
+    "opportunistic_single_stock": {
+      "collection_mode": "on_demand",
+      "priority": 90,
+      "description": "Secondary single-name tickers inferred from broad tapes or sector articles. Skip deep intraday backfill unless promoted by later evidence.",
+      "symbols": [
+        "ADBE",
+        "CRM",
+        "CSCO",
+        "IBM",
+        "INTC",
+        "INTU",
+        "LRCX",
+        "NFLX",
+        "NOW",
+        "ORCL",
+        "QCOM",
+        "SNOW",
+        "TXN"
+      ],
+      "keywords": []
+    }
+  }
+}

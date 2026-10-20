@@ -1,0 +1,102 @@
+{
+  "policy_version": "paper-option-liquidity-gate-regular-session-policy-v1",
+  "created_at": "2026-06-29",
+  "mode": "read_only_regular_session_option_quote_liquidity_gate",
+  "purpose": "Validate that the stock/option paper selector can keep option allocations when regular-session IBKR option bid/ask quotes are available.",
+  "quote_snapshot": {
+    "source": "IBKR reqMktData read-only option quote snapshot",
+    "report": "exports/m103_ibkr_regular_session_option_quote_snapshot.md",
+    "json": "exports/m103_ibkr_regular_session_option_quote_snapshot.json",
+    "requested_quotes": 34,
+    "quoted_contracts": 34,
+    "quoted_rate": 1.0,
+    "avg_spread_pct": 0.1568,
+    "status_counts": {
+      "quoted": 31,
+      "wide_spread": 3
+    },
+    "market_data_type": 1,
+    "delayed": false,
+    "symbols": [
+      "AVGO",
+      "NOW",
+      "AMD",
+      "SNOW",
+      "CRM",
+      "ORCL",
+      "MU",
+      "CSCO",
+      "TSLA",
+      "LRCX",
+      "INTU",
+      "NFLX",
+      "INTC",
+      "TXN",
+      "GOOGL",
+      "META",
+      "AAPL"
+    ]
+  },
+  "liquidity_gate_parameters": {
+    "max_spread_pct": 0.30,
+    "min_quoted_contracts_per_symbol": 1,
+    "min_volume": 0,
+    "min_open_interest": 0,
+    "require_iv": false,
+    "fallback_to_stock": true
+  },
+  "m100_gate_evidence": {
+    "allocation_json": "exports/m100_v14_nuanced_v1_stock_option_walk_forward_tuning.json",
+    "gate_report": "exports/m103_m100_option_liquidity_gate.md",
+    "gate_json": "exports/m103_m100_option_liquidity_gate.json",
+    "source_selected_allocations": 301,
+    "option_allocations_seen": 70,
+    "option_allocations_passed": 68,
+    "option_allocations_downgraded_to_stock": 2,
+    "option_allocations_blocked": 0,
+    "gated_selected_allocations": 301,
+    "gated_positive_realized": 179,
+    "gated_evaluated_allocations": 301,
+    "gated_positive_realized_rate": 0.5947,
+    "gated_total_pnl": 9842.94
+  },
+  "m102_gate_evidence": {
+    "allocation_json": "exports/m102_v14_nuanced_v1_stock_option_wide_grid_tuning.json",
+    "gate_report": "exports/m103_m102_option_liquidity_gate.md",
+    "gate_json": "exports/m103_m102_option_liquidity_gate.json",
+    "source_selected_allocations": 279,
+    "option_allocations_seen": 70,
+    "option_allocations_passed": 68,
+    "option_allocations_downgraded_to_stock": 2,
+    "option_allocations_blocked": 0,
+    "gated_selected_allocations": 279,
+    "gated_positive_realized": 169,
+    "gated_evaluated_allocations": 279,
+    "gated_positive_realized_rate": 0.6057,
+    "gated_total_pnl": 9418.13
+  },
+  "failed_symbol_profiles": {
+    "INTU": {
+      "contracts_seen": 2,
+      "quoted_contracts": 0,
+      "avg_spread_pct": 0.4234,
+      "failed_reasons": [
+        "insufficient_quoted_contracts",
+        "spread_unavailable_or_too_wide"
+      ]
+    }
+  },
+  "safety": {
+    "paper_only": true,
+    "read_only_quote_snapshot": true,
+    "ibkr_order_submitted": false,
+    "account_or_portfolio_checked": false,
+    "margin_checked": false,
+    "scorer_rows_mutated": false
+  },
+  "known_limitations": [
+    "The liquidity gate remains symbol-level and does not yet match exact theoretical spread legs to live strike/expiration liquidity.",
+    "Reference prices were used to select a near-ATM live quote sample; future execution-readiness needs exact strategy-leg quote matching.",
+    "No account, buying power, margin, assignment, exercise, or order-routing checks are performed."
+  ]
+}

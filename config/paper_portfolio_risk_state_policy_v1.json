@@ -1,0 +1,43 @@
+{
+  "policy_version": "paper-portfolio-risk-state-policy-v1",
+  "milestone": "M123",
+  "mode": "paper_only_portfolio_risk_state",
+  "input": {
+    "source": "M122 paper portfolio state JSON"
+  },
+  "risk_limits": {
+    "max_gross_exposure": 100000.0,
+    "max_symbol_exposure": 25000.0,
+    "max_short_exposure": 25000.0,
+    "max_unrealized_loss": 1000.0,
+    "max_total_loss": 1000.0,
+    "max_open_symbols": 25,
+    "warning_ratio": 0.8
+  },
+  "risk_states": {
+    "within_limits": "No hard breaches or warnings; paper new entries remain allowed.",
+    "monitor": "No hard breaches, but one or more metrics are near a configured limit or a mark is missing.",
+    "reduce_risk": "One or more hard limits are breached; paper new entries are paused and risk reduction is recommended."
+  },
+  "latest_validation": {
+    "risk_run_id": "m123_20260630_m122_portfolio_risk_state",
+    "source_portfolio_state_run_id": "m122_20260630_m118_m121_portfolio_state",
+    "risk_state": "within_limits",
+    "recommended_action": "allow_new_entries",
+    "new_entries_allowed": true,
+    "breach_count": 0,
+    "warning_count": 0,
+    "gross_exposure": 33.92,
+    "short_exposure": 24.64,
+    "total_pnl": 0.03,
+    "output": "exports/m123_paper_portfolio_risk_state.json"
+  },
+  "safety": {
+    "paper_only": true,
+    "ibkr_order_submitted": false,
+    "transmit_enabled": false,
+    "live_order_routing_enabled": false,
+    "portfolio_mutation_enabled": false,
+    "description": "M123 evaluates paper portfolio state against paper risk limits only. It does not call broker order APIs, submit orders, transmit orders, or mutate a real portfolio."
+  }
+}

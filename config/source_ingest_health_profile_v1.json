@@ -1,0 +1,41 @@
+{
+  "profile_version": "source-ingest-health-profile-v1",
+  "milestone": "M160-M161",
+  "description": "M160-M161 Data Source Doctor profile. Separates online-required realtime sources from slower batch sources, diagnoses root causes for lagging/stale evidence, reads M161 provider live validation when available, and writes dashboard-compatible source ingest health artifacts.",
+  "paths": {
+    "freshness_report_json": "../exports/m152_evidence_freshness_desk.json",
+    "refresh_queue_json": "../exports/m153_evidence_refresh_queue_execute.json",
+    "watchdog_json": "../exports/m159_dashboard_evidence_refresh_watchdog_latest.json",
+    "live_validation_json": "../exports/m161_source_live_validation.json"
+  },
+  "sources": {
+    "online_required_sources": [
+      "market_data",
+      "market_news",
+      "geopolitical_signals"
+    ],
+    "batch_sources": [
+      "standing_regimes",
+      "economic_indicators",
+      "technical_indicators"
+    ]
+  },
+  "loop": {
+    "max_ticks": 1,
+    "interval_seconds": 1.0,
+    "sleep_between_ticks": false,
+    "refresh_freshness_before_check": false
+  },
+  "outputs": {
+    "output": "../exports/m160_source_ingest_health.md",
+    "json_output_path": "../exports/m160_source_ingest_health.json",
+    "tick_log_jsonl_path": "../exports/m160_source_ingest_health_ticks.jsonl"
+  },
+  "safety": {
+    "read_only_ingest_health": true,
+    "orders_submitted": false,
+    "transmit_enabled": false,
+    "scorer_rows_mutated": false,
+    "real_portfolio_mutated": false
+  }
+}

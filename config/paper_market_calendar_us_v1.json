@@ -1,0 +1,71 @@
+{
+  "calendar_version": "paper-market-calendar-us-v1",
+  "market": "US_EQUITIES",
+  "timezone": "America/New_York",
+  "regular_hours": {
+    "pre_start": "04:00",
+    "regular_start": "09:30",
+    "regular_end": "16:00",
+    "after_end": "20:00"
+  },
+  "holidays": [
+    {
+      "date": "2026-01-01",
+      "name": "New Year's Day"
+    },
+    {
+      "date": "2026-01-19",
+      "name": "Martin Luther King, Jr. Day"
+    },
+    {
+      "date": "2026-02-16",
+      "name": "Washington's Birthday"
+    },
+    {
+      "date": "2026-04-03",
+      "name": "Good Friday"
+    },
+    {
+      "date": "2026-05-25",
+      "name": "Memorial Day"
+    },
+    {
+      "date": "2026-06-19",
+      "name": "Juneteenth National Independence Day"
+    },
+    {
+      "date": "2026-07-03",
+      "name": "Independence Day observed"
+    },
+    {
+      "date": "2026-09-07",
+      "name": "Labor Day"
+    },
+    {
+      "date": "2026-11-26",
+      "name": "Thanksgiving Day"
+    },
+    {
+      "date": "2026-12-25",
+      "name": "Christmas Day"
+    }
+  ],
+  "early_closes": [
+    {
+      "date": "2026-11-27",
+      "name": "Day after Thanksgiving",
+      "regular_end": "13:00",
+      "after_end": "17:00"
+    },
+    {
+      "date": "2026-12-24",
+      "name": "Christmas Eve",
+      "regular_end": "13:00",
+      "after_end": "17:00"
+    }
+  ],
+  "source_notes": [
+    "NYSE holiday/trading-hours calendar lists 2026 full market holidays and 1:00 p.m. ET early closes.",
+    "Nasdaq UTP alerts confirm selected 2026 U.S. equities/options market holidays such as Juneteenth and Independence Day."
+  ]
+}

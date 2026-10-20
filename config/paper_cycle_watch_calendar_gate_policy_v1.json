@@ -1,0 +1,39 @@
+{
+  "policy_version": "paper-cycle-watch-calendar-gate-policy-v1",
+  "milestone": "M135",
+  "description": "Requires profile-backed paper watch ticks to evaluate a U.S. equity market calendar before scheduler execution.",
+  "calendar_profile_json": "config/paper_cycle_watch_calendar_profile_v1.json",
+  "market_calendar_json": "config/paper_market_calendar_us_v1.json",
+  "required_gate_behavior": [
+    "Full market holidays must classify as closed and block paper watch ticks unless --ignore-session-gate is used.",
+    "Early-close dates must override the regular-session end time before allowed-session matching.",
+    "When allowed_sessions is regular-only, a timestamp after the early close must be blocked as after_hours.",
+    "Calendar gate decisions remain paper-only and must not submit or transmit live IBKR orders."
+  ],
+  "validation_cases": [
+    {
+      "name": "independence_day_observed_holiday_block",
+      "session_gate_now": "2026-07-03T10:00:00-04:00",
+      "expected_session": "closed",
+      "expected_allowed": false
+    },
+    {
+      "name": "day_after_thanksgiving_regular_before_early_close",
+      "session_gate_now": "2026-11-27T12:30:00-05:00",
+      "expected_session": "regular",
+      "expected_allowed": true
+    },
+    {
+      "name": "day_after_thanksgiving_after_early_close",
+      "session_gate_now": "2026-11-27T14:00:00-05:00",
+      "expected_session": "after_hours",
+      "expected_allowed": false
+    }
+  ],
+  "safety": {
+    "paper_only": true,
+    "live_order_routing_enabled": false,
+    "ibkr_order_submitted": false,
+    "transmit_enabled": false
+  }
+}

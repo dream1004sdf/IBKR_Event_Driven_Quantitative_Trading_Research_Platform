@@ -1,0 +1,31 @@
+{
+  "version": "gate-severity-policy-config-v1",
+  "haircut_size_multipliers": {
+    "default": 0.75,
+    "market_temperature": 0.5,
+    "wide_spread": 0.6,
+    "option_quotes_not_fresh": 0.6,
+    "close_only": 0.7,
+    "stale": 0.7
+  },
+  "confidence_multipliers": {
+    "trade_now_blocker": 0.6,
+    "haircut": 0.85,
+    "confidence_discount_default": 0.9,
+    "promotion_gate": 0.8,
+    "evidence_or_source": 0.85
+  },
+  "final_entry_size_resolver": {
+    "mode": "product_with_floor",
+    "soft_floor_multiplier": 0.25,
+    "multi_haircut_floor_factor": 0.65,
+    "stock_min_quantity": 0.01,
+    "stock_quantity_increment": 0.01,
+    "option_min_contract_quantity": 1
+  },
+  "paper_option_ticket": {
+    "apply_size_multiplier_to_max_debit": true,
+    "min_effective_max_ticket_debit": 5.0,
+    "keep_min_one_contract": true
+  }
+}

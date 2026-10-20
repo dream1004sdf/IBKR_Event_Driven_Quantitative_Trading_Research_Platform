@@ -1,0 +1,28 @@
+{
+  "profile_version": "evidence-preflight-profile-v1",
+  "milestone": "M155",
+  "description": "Read-only operating preflight gate that converts M152 evidence freshness and M154 auto-recovery state into paper/scorer action safety: stale/offline/recovery failure blocks new paper entries, lagging evidence applies a conservative size haircut.",
+  "paths": {
+    "freshness_report_json": "../exports/m152_evidence_freshness_desk.json",
+    "watchdog_state_json": "../exports/m154_evidence_refresh_watchdog_state.json"
+  },
+  "preflight": {
+    "block_on_stale": true,
+    "block_on_offline": true,
+    "block_on_watchdog_failure": true,
+    "allow_lagging_with_haircut": true,
+    "lagging_size_multiplier": 0.5,
+    "min_source_weight": 0.25
+  },
+  "outputs": {
+    "output": "../exports/m155_evidence_preflight.md",
+    "json_output_path": "../exports/m155_evidence_preflight.json"
+  },
+  "safety": {
+    "read_only_preflight": true,
+    "scorer_rows_mutated": false,
+    "ibkr_order_submitted": false,
+    "transmit_enabled": false,
+    "portfolio_mutated": false
+  }
+}

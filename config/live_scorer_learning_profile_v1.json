@@ -1,0 +1,36 @@
+{
+  "profile_version": "m223-live-scorer-learning-profile-v1",
+  "milestone": "M223",
+  "description": "Shadow-only live scorer learning supervisor. It logs live news/geopolitical predictions, evaluates later market outcomes, writes adjustment notes and threshold candidates, and never mutates the promoted live scorer.",
+  "paths": {
+    "database_path": "../market_events.db",
+    "market_data_json": "../exports/m153_market_data_desk_refresh.json",
+    "evidence_freshness_json": "../exports/m152_evidence_freshness_desk.json",
+    "source_online_supervisor_json": "../exports/m173_source_online_supervisor.json",
+    "options_market_structure_json": "../exports/m217_options_market_structure_desk.json",
+    "options_market_structure_supervisor_json": "../exports/m219_options_market_structure_supervisor.json",
+    "m232_hot_cache_json": "../exports/m232_hot_cache.json"
+  },
+  "learning": {
+    "max_ticks": 0,
+    "interval_seconds": 30.0,
+    "sleep_between_ticks": true,
+    "lookback_minutes": 180,
+    "max_new_events_per_tick": 25,
+    "horizons_minutes": "5,15,30",
+    "scorer_name": "m223_shadow_heuristic",
+    "scorer_version": "shadow-threshold-candidate-v1",
+    "magnitude_threshold_pct": 0.15
+  },
+  "outputs": {
+    "output": "../exports/m223_live_scorer_learning.md",
+    "json_output_path": "../exports/m223_live_scorer_learning.json"
+  },
+  "safety": {
+    "shadow_only": true,
+    "orders_submitted": false,
+    "transmit_enabled": false,
+    "live_scorer_mutated": false,
+    "threshold_promoted": false
+  }
+}

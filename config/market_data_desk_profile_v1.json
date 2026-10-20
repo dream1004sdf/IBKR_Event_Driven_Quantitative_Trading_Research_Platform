@@ -1,0 +1,24 @@
+{
+  "profile_version": "market-data-desk-profile-v1",
+  "milestone": "M151-M215",
+  "description": "Read-only IBKR Market Data Desk profile for global FX, rates, volatility, equity index futures, commodities, crypto proxy monitoring, and M215 dynamic account option underlying stock/ETF coverage. Writes a dashboard-compatible decomposed market temperature snapshot and can fall back from spot FX to IBKR FX futures proxies.",
+  "command": "market-data-desk",
+  "market_data": {
+    "market_data_type": 1,
+    "seconds": 30,
+    "refresh_seconds": 5.0,
+    "gap_threshold_pct": 1.0,
+    "tick_move_threshold_pct": 0.5,
+    "fallback_after_seconds": 8.0
+  },
+  "outputs": {
+    "output": "../exports/m151_market_data_desk_temperature_decomposed.md",
+    "json_output_path": "../exports/m151_market_data_desk_temperature_decomposed_snapshot.json"
+  },
+  "safety": {
+    "read_only_ibkr_market_data": true,
+    "ibkr_order_submitted": false,
+    "transmit_enabled": false,
+    "account_or_portfolio_mutated": false
+  }
+}
