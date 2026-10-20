@@ -1,6 +1,8 @@
-# Research status
+# Quantitative trading research status
 
 Public snapshot prepared on 2026-10-19. The latest reviewed historical Codex completion is 2026-07-22. This snapshot contains current source files rather than the private repository's earlier committed state.
+
+The development focus is event-driven quantitative trading research: collect market evidence, model events and affected assets, evaluate forecasts against observed reactions, and apply capital/options controls to paper decisions. Current implementation evidence covers these research and risk-control components; independent strategy validation and full live execution integration remain later stages.
 
 ## Implemented
 

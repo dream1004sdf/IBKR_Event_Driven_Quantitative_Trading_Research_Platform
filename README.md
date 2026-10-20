@@ -1,12 +1,26 @@
-# IBKR Event Research Platform
+# IBKR Event-Driven Quantitative Trading Research Platform
 
 **Python · SQLite · IBKR API · pandas · Pydantic · pytest**
 
-[![Python tests](https://github.com/dream1004sdf/ibkr-event-research-platform/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/dream1004sdf/ibkr-event-research-platform/actions/workflows/tests.yml)
+[![Python tests](https://github.com/dream1004sdf/IBKR_Event_Driven_Quantitative_Trading_Research_Platform/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/dream1004sdf/IBKR_Event_Driven_Quantitative_Trading_Research_Platform/actions/workflows/tests.yml)
 
-An event-driven research platform for collecting market evidence, identifying the assets affected by news, and measuring predictions against later market reactions. The project combines data ingestion, point-in-time replay, probability calibration, and capital/options checks in a single Python codebase.
+An event-driven quantitative trading research platform that turns news and macroeconomic events into asset-level research hypotheses, measures subsequent market reactions, and evaluates probabilistic forecasts. It combines market-data engineering, signal research, point-in-time replay, probability calibration, and capital/options risk checks in a single Python codebase.
 
-The engineering goal is to make every prediction traceable: what information was available, which company or proxy asset it referred to, how the outcome was measured, and why a proposed paper action was accepted or blocked.
+The research objective is to test whether an event contains useful information about future asset returns. The engineering goal is to make each experiment traceable: what evidence was available at the decision time, which company or proxy asset it referred to, how the outcome was measured, and why a proposed paper action was accepted or blocked.
+
+## Role in a quantitative trading system
+
+This project implements the data, event-modeling, quantitative evaluation, and paper-decision components of a systematic trading workflow.
+
+| Component | Implementation in this repository |
+|---|---|
+| Research data infrastructure | News, prices, filings and macroeconomic collection; SQLite storage and source lineage |
+| Event and candidate-signal research | Subject attribution, event clustering, affected-asset mapping, heuristic and optional AI forecasts |
+| Quantitative validation | Observed reaction returns, directional and probability metrics, calibration, historical replay and leakage checks |
+| Capital and options risk controls | Budget and margin context, quote freshness, option structures, candidate ranking and paper-action gates |
+| Execution preparation | Simulated tickets, broker what-if requests and readiness checks; full live order/fill/position integration remains further work |
+
+The strategy-research approach is **event-driven**: identify a news or macro event, map its affected assets, form a forecast using information available at that time, and compare it with later market outcomes. Quantitative validation determines whether a research hypothesis can advance to paper testing.
 
 ## What it does
 

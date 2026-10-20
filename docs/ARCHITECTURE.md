@@ -1,6 +1,8 @@
-# Architecture
+# Quantitative trading research architecture
 
-The application is a modular Python research system. SQLite holds durable raw, derived and evaluation state; JSON, Markdown and HTML artifacts connect command-line jobs, operating loops and the dashboard.
+The application implements the data, event-research, validation and paper-decision components of an event-driven quantitative trading system. It follows the research flow from market evidence to candidate forecasts, observed returns, quantitative evaluation and risk-constrained paper actions.
+
+The implementation is modular Python. SQLite holds durable raw, derived and evaluation state; JSON, Markdown and HTML artifacts connect command-line jobs, operating loops and the dashboard.
 
 ## Collection and storage
 
@@ -15,6 +17,8 @@ The application is a modular Python research system. SQLite holds durable raw, d
 `evidence_packet.py`, `prompting.py` and `analysis_service.py` build versioned inputs before analysis. The analysis queue has queued, processing, retry, complete, skipped and dead states. `analysis_models.py` validates structured outputs, while `ai_provider.py` provides heuristic and optional external-model adapters.
 
 ## Evaluation and research
+
+The quantitative research unit is an event/asset/horizon observation. Forecast probabilities and expected reactions are assessed against later market observations, with input availability and outcome eligibility treated as part of the experiment definition.
 
 `prediction_evaluation/metrics.py` calculates classification, probability and return metrics. `calibration.py` implements calibration profiles and time-based splits. Replay engines preserve the prediction cutoff and audit input snapshots for future evidence and outcome leakage.
 
